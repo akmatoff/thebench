@@ -3,6 +3,8 @@ package infra
 import (
 	"reflect"
 	"sync"
+
+	"github.com/akmatoff/thebench/domain"
 )
 
 type EventHandler func(event any)
@@ -18,7 +20,7 @@ func NewEventBus() *EventBus {
 	}
 }
 
-func (eb *EventBus) Subscribe(eventType interface{}, handler EventHandler) {
+func (eb *EventBus) Subscribe(eventType string, handler EventHandler) {
 	eb.mu.Lock()
 	defer eb.mu.Unlock()
 
@@ -26,7 +28,7 @@ func (eb *EventBus) Subscribe(eventType interface{}, handler EventHandler) {
 	eb.handlers[typeName] = append(eb.handlers[typeName], handler)
 }
 
-func (eb *EventBus) Publish(event interface{}) {
+func (eb *EventBus) Publish(event domain.Event) {
 	eb.mu.RLock()
 	defer eb.mu.RUnlock()
 
