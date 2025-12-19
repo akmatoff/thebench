@@ -15,15 +15,6 @@ type Bench struct {
 	LastGesture  *Gesture
 }
 
-type BenchState struct {
-	ID           string          `json:"id"`
-	WitnessCount int             `json:"witness_count"`
-	Sitters      [2]*Participant `json:"sitters"`
-	IsTaken      bool            `json:"is_taken"`
-	Atmosphere   Atmosphere      `json:"atmosphere"`
-	LastGesture  *Gesture        `json:"last_gesture"`
-}
-
 func NewBench() *Bench {
 	return &Bench{
 		ID:           "the-bench",
