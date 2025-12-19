@@ -1,4 +1,4 @@
-const WS_URL = "ws://".concat(window.location.host, "/bench");
+const WS_URL = "ws://localhost:7000/bench";
 
 const ws = new WebSocket(WS_URL);
 
@@ -9,8 +9,7 @@ ws.onopen = () => {
 ws.onmessage = (event) => {
   const message = JSON.parse(event.data);
 
-  switch (message.type) {
-  }
+  console.log("message", message);
 };
 
 ws.onclose = () => {

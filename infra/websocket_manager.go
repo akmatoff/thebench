@@ -1,6 +1,7 @@
 package infra
 
 import (
+	"log"
 	"sync"
 
 	"github.com/akmatoff/thebench/domain"
@@ -61,6 +62,8 @@ func (ws *WebSocketManager) HandleConnection(conn *websocket.Conn) {
 	}
 
 	ws.AddClient(clientID, client)
+
+	log.Printf("New connection: %s", clientID)
 }
 
 func (ws *WebSocketManager) Broadcast(event any) {

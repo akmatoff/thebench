@@ -1,4 +1,5 @@
 import { Application } from "pixi.js";
+import "./websocket";
 
 (async () => {
   // Create a new application
