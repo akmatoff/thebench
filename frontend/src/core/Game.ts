@@ -1,12 +1,15 @@
 import { Application, Ticker } from "pixi.js";
 import { BaseScene } from "./BaseScene";
+import { AudioManager } from "./AudioManager";
 
 export class Game {
   public app: Application;
   private currentScene: BaseScene | null = null;
+  public audio: AudioManager;
 
-  constructor(app: Application) {
+  constructor(app: Application, audio: AudioManager) {
     this.app = app;
+    this.audio = audio;
   }
 
   start(SceneClass: new (game: Game) => BaseScene) {

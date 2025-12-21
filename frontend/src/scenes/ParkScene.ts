@@ -6,7 +6,7 @@ import { Ground } from "../components/ground";
 export class ParkScene extends BaseScene {
   private bench!: Bench;
   private nightFilter!: ColorMatrixFilter;
-  private nightOverlay: Graphics;
+  private nightOverlay!: Graphics;
 
   async init() {
     this.bench = new Bench();

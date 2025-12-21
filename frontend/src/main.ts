@@ -3,6 +3,7 @@ import "./websocket";
 import { loadAssets } from "./loaders/assetLoader";
 import { Game } from "./core/Game";
 import { ParkScene } from "./scenes/ParkScene";
+import { AudioManager } from "./core/AudioManager";
 
 (async () => {
   await loadAssets();
@@ -13,7 +14,9 @@ import { ParkScene } from "./scenes/ParkScene";
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  const game = new Game(app);
+  const audio = new AudioManager();
+
+  const game = new Game(app, audio);
 
   game.start(ParkScene);
 })();
