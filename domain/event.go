@@ -1,8 +1,8 @@
 package domain
 
 type Event struct {
-	Type string
-	Data any
+	Type    string
+	Payload any
 }
 
 type EventPublisher interface {

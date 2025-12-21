@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/akmatoff/thebench/infra"
 	"github.com/gorilla/websocket"
 )
 
@@ -20,9 +19,11 @@ func main() {
 
 	http.Handle("/", http.StripPrefix("/", fileServer))
 
-	upgrader := websocket.Upgrader{}
-
-	eventBus := infra.NewEventBus()
+	upgrader := websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
 
 	// benchService := application.NewBenchService(
 	// 	infra.NewBenchRepository(),
@@ -37,9 +38,10 @@ func main() {
 			return
 		}
 
-		wsManager := infra.NewWebSocketManager(eventBus)
+		log.Println(conn)
 
-		go wsManager.HandleConnection(conn)
+		// wsManager := infra.NewWebSocketManager()
+
 	})
 	http.ListenAndServe(":7000", nil)
 }

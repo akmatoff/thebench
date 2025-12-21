@@ -1,20 +1,19 @@
 import { Application } from "pixi.js";
 import "./websocket";
+import { loadAssets } from "./loaders/assetLoader";
+import { Game } from "./core/Game";
+import { ParkScene } from "./scenes/ParkScene";
 
 (async () => {
-  // Create a new application
+  await loadAssets();
+
   const app = new Application();
 
-  // Initialize the application
-  await app.init({ background: "#529bd6ff", resizeTo: window });
+  await app.init({ background: "#1e2a4dff", resizeTo: window });
 
-  // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  // Listen for animate update
-  app.ticker.add(() => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-  });
+  const game = new Game(app);
+
+  game.start(ParkScene);
 })();

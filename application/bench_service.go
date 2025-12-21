@@ -16,3 +16,13 @@ func NewBenchService(benchRepo *infra.BenchRepository, eventPublisher domain.Eve
 		eventPublisher: eventPublisher,
 	}
 }
+
+func (b *BenchService) GetBench(id string) (*domain.Bench, error) {
+	return b.benchRepo.Get(id)
+}
+
+func (b *BenchService) Sit(p *domain.Participant) error {
+	bench, _ := b.benchRepo.Get("the-bench")
+
+	return bench.Sit(p)
+}
