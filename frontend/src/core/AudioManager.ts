@@ -1,6 +1,6 @@
 import { Howl } from "howler";
-import bgAudio from "../assets/bg_music.mp3";
-import bgAmbience from "../assets/bg_ambience.mp3";
+import bgAudio from "../assets/audio/bg_music.mp3";
+import bgAmbience from "../assets/audio/bg_ambience.mp3";
 
 export class AudioManager {
   public backgroundMusic: Howl;
@@ -26,7 +26,7 @@ export class AudioManager {
     });
 
     this.backgroundAmbience.play();
-    this.backgroundAmbience.fade(0, 0.15, 3000);
+    this.backgroundAmbience.fade(0, 0.3, 3000);
 
     this.addFilters();
   }
