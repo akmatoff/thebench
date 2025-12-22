@@ -19,27 +19,21 @@ export class StreetLamp extends Container {
     this.addChild(this.base);
     this.addChild(this.bulb);
 
-    this.bulb.tint = "#ffcd43ff";
+    this.bulb.tint = "#ffe18eff";
     this.base.tint = "#393e81ff";
 
+    this.scale.set(1.3);
+
     this.glowFilter = new GlowFilter({
-      distance: 48,
-      outerStrength: 3,
-      innerStrength: 24,
-      quality: 0.4,
-      knockout: true,
+      distance: 4,
+      outerStrength: 16,
+      innerStrength: 0,
+      quality: 0.5,
       color: "#ffe0b8ff",
     });
 
     this.bulb.filters = [this.glowFilter];
   }
 
-  update(ticker: Ticker) {
-    const time = ticker.deltaMS * 0.001;
-    const amplitude = 3;
-    const frequency = 3;
-
-    const glowOffset = 2.6 + amplitude * Math.sin(frequency * time);
-    this.glowFilter.outerStrength = glowOffset;
-  }
+  update(ticker: Ticker) {}
 }

@@ -27,4 +27,12 @@ import { AudioManager } from "./core/AudioManager";
   const game = new Game(app, audio);
 
   game.start(ParkScene);
+
+  document.addEventListener("beforeunload", () => {
+    game.destroy();
+  });
+
+  window.addEventListener("resize", () => {
+    app.resize();
+  });
 })();

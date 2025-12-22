@@ -10,5 +10,7 @@ export class Bench extends Sprite {
     this.anchor.set(0.5);
 
     this.tint = "#e0806fff";
+
+    this.filters = [];
   }
 }

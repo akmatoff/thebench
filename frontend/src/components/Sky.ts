@@ -16,7 +16,7 @@ export class Star extends Graphics {
 export class Sky extends Container {
   private background: Graphics;
 
-  //   private starsCount = 80;
+  private starsCount = 80;
 
   private stars: Star[] = [];
 
@@ -25,16 +25,16 @@ export class Sky extends Container {
 
     this.background = new Graphics()
       .rect(0, 0, width, height)
-      .fill("#263049ff")
+      .fill("#1d3164ff")
       .stroke({ width: 0 });
 
     this.addChild(this.background);
 
-    // for (let i = 0; i < this.starsCount; i++) {
-    //   const star = new Star(Math.random() * width, Math.random() * height);
-    //   this.stars.push(star);
-    //   this.addChild(star);
-    // }
+    for (let i = 0; i < this.starsCount; i++) {
+      const star = new Star(Math.random() * width, Math.random() * height);
+      this.stars.push(star);
+      this.addChild(star);
+    }
   }
 
   update(ticker: Ticker) {
