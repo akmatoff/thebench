@@ -1,9 +1,10 @@
-import { ColorMatrixFilter, Container, Graphics, Ticker } from "pixi.js";
+import { BlurFilter, ColorMatrixFilter, Graphics, Ticker } from "pixi.js";
 import { Bench } from "../components/bench";
 import { BaseScene } from "../core/BaseScene";
 import { Ground } from "../components/ground";
 import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
+import { Rain } from "../components/Rain";
 
 export class ParkScene extends BaseScene {
   private bench!: Bench;
@@ -12,10 +13,19 @@ export class ParkScene extends BaseScene {
 
   private streetLamp!: StreetLamp;
   private sky!: Sky;
+
+  private rain!: Rain;
   async init() {
     this.sky = new Sky(this.game.app.screen.width, this.game.app.screen.height);
 
     this.container.addChild(this.sky);
+
+    this.rain = new Rain(
+      this.game.app.screen.width,
+      this.game.app.screen.height
+    );
+
+    this.container.addChild(this.rain);
 
     const ground = new Ground(this.game.app.screen.width);
     ground.position.set(0, this.game.app.screen.height);
@@ -37,19 +47,24 @@ export class ParkScene extends BaseScene {
 
     this.nightFilter = new ColorMatrixFilter();
     this.applyNight();
-    this.container.filters = [this.nightFilter];
+
+    const backdropBlurFilter = new BlurFilter({
+      strength: 0.8,
+    });
+    this.container.filters = [this.nightFilter, backdropBlurFilter];
   }
 
   private applyNight() {
     this.nightFilter.reset();
 
-    this.nightFilter.saturate(-0.2);
-    this.nightFilter.brightness(0.9, false);
+    this.nightFilter.brightness(0.8, false);
+    this.nightFilter.contrast(-0.1, false);
+    this.nightFilter.saturate(-0.2, true);
 
     this.nightOverlay = new Graphics();
     this.nightOverlay
       .rect(0, 0, this.game.app.screen.width, this.game.app.screen.height)
-      .fill("#f7892f0e");
+      .fill("#3b3c4131");
     this.nightOverlay.zIndex = 9999;
     this.container.addChild(this.nightOverlay);
   }
@@ -57,5 +72,6 @@ export class ParkScene extends BaseScene {
   update(ticker: Ticker) {
     this.streetLamp.update(ticker);
     this.sky.update(ticker);
+    this.rain.update(ticker);
   }
 }
