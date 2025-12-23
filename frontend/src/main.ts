@@ -1,5 +1,4 @@
 import { Application } from "pixi.js";
-import "./websocket";
 import "@pixi/layout";
 import { loadAssets } from "./loaders/assetLoader";
 import { Game } from "./core/Game";

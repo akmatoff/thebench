@@ -26,3 +26,8 @@ export type Gesture = {
   authorId: string;
   performedAt: string;
 };
+
+export type BenchMessage = {
+  type: string;
+  payload?: any;
+};
