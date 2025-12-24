@@ -4,8 +4,20 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 
+	"github.com/akmatoff/thebench/application"
+	"github.com/akmatoff/thebench/domain"
+	"github.com/akmatoff/thebench/infra"
+	"github.com/akmatoff/thebench/utils"
 	"github.com/gorilla/websocket"
+)
+
+var (
+	gameSystem  = application.NewGameSystem()
+	wsManager   = infra.NewWebSocketManager()
+	wsMu        sync.Mutex
+	clientCount = 0
 )
 
 func main() {
@@ -25,11 +37,6 @@ func main() {
 		},
 	}
 
-	// benchService := application.NewBenchService(
-	// 	infra.NewBenchRepository(),
-	// 	eventBus,
-	// )
-
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrader.Upgrade(w, r, nil)
 
@@ -38,9 +45,22 @@ func main() {
 			return
 		}
 
-		log.Println(conn)
+		wsMu.Lock()
+		clientCount++
+		clientID := utils.GenerateID()
+		wsMu.Unlock()
 
-		// wsManager := infra.NewWebSocketManager()
+		player := domain.NewWitness(clientID)
+
+		gameSystem.AddPlayer(player)
+
+		client := infra.Client{
+			ID:   clientID,
+			Conn: conn,
+			Role: player.Role,
+		}
+
+		wsManager.AddClient(clientID, &client)
 
 	})
 	http.ListenAndServe(":7000", nil)

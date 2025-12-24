@@ -3,12 +3,12 @@ package domain
 import "time"
 
 type Gesture struct {
-	Type        string
+	Type        Action
 	AuthorID    string
 	PerformedAt time.Time
 }
 
-func NewGesture(t string, a string) *Gesture {
+func NewGesture(t Action, a string) *Gesture {
 	return &Gesture{
 		Type:        t,
 		AuthorID:    a,

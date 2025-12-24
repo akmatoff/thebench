@@ -1,17 +1,14 @@
 package domain
 
 import (
-	"time"
-
 	"github.com/akmatoff/thebench/errors"
 )
 
 type Bench struct {
 	ID           string
 	WitnessCount int
-	Sitters      [2]*Participant
+	Sitters      [2]*Player
 	IsTaken      bool
-	Atmosphere   Atmosphere
 	LastGesture  *Gesture
 }
 
@@ -20,11 +17,8 @@ func NewBench() *Bench {
 		ID:           "the-bench",
 		WitnessCount: 0,
 		IsTaken:      false,
-		Sitters:      [2]*Participant{nil, nil},
-		Atmosphere: Atmosphere{
-			Lighting:  string(Dawn),
-			TimeOfDay: time.Now(),
-		},
+		Sitters:      [2]*Player{nil, nil},
+
 		LastGesture: nil,
 	}
 }
@@ -33,7 +27,7 @@ func (b *Bench) CanSit() bool {
 	return b.Sitters[0] == nil || b.Sitters[1] == nil
 }
 
-func (b *Bench) Sit(p *Participant) error {
+func (b *Bench) Sit(p *Player) error {
 	if !b.CanSit() {
 		return errors.ErrBenchFull
 	}
