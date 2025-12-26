@@ -22,7 +22,13 @@ export class StreetLamp extends Container {
     this.bulb.tint = "#ffe18eff";
     this.base.tint = "#393e81ff";
 
-    this.scale.set(1.3);
+    this.base.width = 64;
+    this.base.height = 256;
+
+    this.bulb.width = 64;
+    this.bulb.height = 256;
+
+    this.scale.set(1.4);
 
     this.glowFilter = new GlowFilter({
       distance: 4,

@@ -9,6 +9,9 @@ export class Bench extends Sprite {
     this.scale.set(1.5);
     this.anchor.set(0.5);
 
+    this.width = 256;
+    this.height = 256;
+
     this.tint = "#e0806fff";
 
     this.filters = [];

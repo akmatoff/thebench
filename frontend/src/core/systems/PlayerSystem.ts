@@ -17,12 +17,12 @@ export class PlayerSystem {
     this.gameState = game.state;
     this.container = sceneContainer;
 
-    this.gameState.setOnUpdate(this.onStateUpdate.bind(this));
-  }
-
-  onStateUpdate(snapshot: GameStateSnapshot): void {
     const player = new Player();
 
     this.container.addChild(player);
+
+    this.gameState.setOnUpdate(this.onStateUpdate.bind(this));
   }
+
+  onStateUpdate(snapshot: GameStateSnapshot): void {}
 }
