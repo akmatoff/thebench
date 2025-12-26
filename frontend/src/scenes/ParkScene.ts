@@ -1,4 +1,4 @@
-import { Ticker } from "pixi.js";
+import { NoiseFilter, Ticker } from "pixi.js";
 import { Bench } from "../components/Bench";
 import { BaseScene } from "../core/BaseScene";
 import { StreetLamp } from "../components/StreetLamp";
@@ -37,7 +37,11 @@ export class ParkScene extends BaseScene {
 
     this.container.addChild(this.streetLamp);
 
-    this.container.filters = [];
+    this.container.filters = [
+      new NoiseFilter({
+        noise: 0.1,
+      }),
+    ];
 
     this.playerSystem = new PlayerSystem(this.game, this.container);
   }
