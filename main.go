@@ -4,20 +4,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"sync"
 
 	"github.com/akmatoff/thebench/application"
-	"github.com/akmatoff/thebench/domain"
 	"github.com/akmatoff/thebench/infra"
-	"github.com/akmatoff/thebench/utils"
-	"github.com/gorilla/websocket"
-)
-
-var (
-	gameSystem  = application.NewGameSystem()
-	wsManager   = infra.NewWebSocketManager()
-	wsMu        sync.Mutex
-	clientCount = 0
+	"github.com/akmatoff/thebench/transport/websocket"
 )
 
 func main() {
@@ -31,37 +21,13 @@ func main() {
 
 	http.Handle("/", http.StripPrefix("/", fileServer))
 
-	upgrader := websocket.Upgrader{
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
+	gameSystem := application.NewGameSystem()
+	wsManager := infra.NewWebSocketManager()
 
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		conn, err := upgrader.Upgrade(w, r, nil)
+	wsHandler := websocket.NewHandler(gameSystem, wsManager)
 
-		if err != nil {
-			log.Println("upgrade:", err)
-			return
-		}
+	http.Handle("/ws", wsHandler)
 
-		wsMu.Lock()
-		clientCount++
-		clientID := utils.GenerateID()
-		wsMu.Unlock()
-
-		player := domain.NewWitness(clientID)
-
-		gameSystem.AddPlayer(player)
-
-		client := infra.Client{
-			ID:   clientID,
-			Conn: conn,
-			Role: player.Role,
-		}
-
-		wsManager.AddClient(clientID, &client)
-
-	})
+	log.Println("Listening on port 7000")
 	http.ListenAndServe(":7000", nil)
 }

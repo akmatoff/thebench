@@ -26,6 +26,14 @@ func NewWebSocketManager() *WebSocketManager {
 	}
 }
 
+func NewClient(id string, conn *websocket.Conn, role domain.PlayerRole) *Client {
+	return &Client{
+		ID:   id,
+		Conn: conn,
+		Role: role,
+	}
+}
+
 func (wm *WebSocketManager) AddClient(id string, client *Client) {
 	wm.mu.Lock()
 	defer wm.mu.Unlock()
@@ -56,4 +64,17 @@ func (wm *WebSocketManager) Broadcast(snapshot any) {
 			log.Printf("broadcast to %s failed: %v", client.ID, err)
 		}
 	}
+}
+
+func (wm *WebSocketManager) SendToClient(clientID string, msg any) {
+	wm.mu.RLock()
+	defer wm.mu.RUnlock()
+
+	client, ok := wm.clients[clientID]
+	if !ok {
+		return
+	}
+
+	data, _ := json.Marshal(msg)
+	client.Conn.WriteMessage(websocket.TextMessage, data)
 }
