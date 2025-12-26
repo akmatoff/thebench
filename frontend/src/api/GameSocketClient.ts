@@ -1,6 +1,6 @@
-import { BenchMessage } from "../types";
+import { GameMessage } from "../types";
 
-export class BenchSocketClient {
+export class GameSocketClient {
   private url: string;
   private ws: WebSocket | null = null;
 
@@ -11,7 +11,7 @@ export class BenchSocketClient {
   private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
   private readonly heartbeatIntervalMs = 5000;
 
-  private onMessageHandler: ((message: BenchMessage) => void) | null = null;
+  private onMessageHandler: ((message: GameMessage) => void) | null = null;
   private onErrorHandler: (() => void) | null = null;
   private onCloseHandler: (() => void) | null = null;
   private onOpenHandler: (() => void) | null = null;
@@ -78,7 +78,7 @@ export class BenchSocketClient {
     }, 1000);
   }
 
-  send(message: BenchMessage) {
+  send(message: GameMessage) {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message));
     } else {
@@ -104,7 +104,7 @@ export class BenchSocketClient {
     this.onOpenHandler = handler;
   }
 
-  onMessage(handler: (message: BenchMessage) => void) {
+  onMessage(handler: (message: GameMessage) => void) {
     this.onMessageHandler = handler;
   }
 

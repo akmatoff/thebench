@@ -1,7 +1,8 @@
 package websocket
 
 type IncommingMessage struct {
-	Action string `json:"action"`
+	Type    string `json:"type"`
+	Payload any    `json:"payload"`
 }
 
 type OutgoingMessage = any

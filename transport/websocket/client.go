@@ -57,27 +57,48 @@ func (c *ClientHandler) listen() {
 			continue
 		}
 
-		action := domain.Action(message.Action)
+		switch message.Type {
 
-		validActions := map[domain.Action]bool{
-			domain.ActionSit:   true,
-			domain.ActionLeave: true,
-			domain.ActionSmoke: true,
-			domain.ActionWave:  true,
-			domain.ActionPat:   true,
+		case "PING":
+			c.sendPong()
+
+		case "ACTION":
+			c.handleAction(message.Payload.(struct{ action string }))
 		}
 
-		if !validActions[action] {
-			log.Printf("invalid action for client %s: %s", c.clientID, action)
-			continue
-		}
-
-		if err := c.gameSystem.PerformAction(c.clientID, action); err != nil {
-			log.Printf("Action failed for client %s: %v", c.clientID, err)
-			continue
-		}
-
-		snapshot := c.gameSystem.GetSnapshot()
-		c.wsManager.Broadcast(snapshot)
 	}
+}
+
+func (c *ClientHandler) handleAction(payload struct{ action string }) {
+	action := domain.Action(payload.action)
+
+	validActions := map[domain.Action]bool{
+		domain.ActionSit:   true,
+		domain.ActionLeave: true,
+		domain.ActionSmoke: true,
+		domain.ActionWave:  true,
+		domain.ActionPat:   true,
+	}
+
+	if !validActions[action] {
+		log.Printf("invalid action for client %s: %s", c.clientID, action)
+		return
+	}
+
+	if err := c.gameSystem.PerformAction(c.clientID, action); err != nil {
+		log.Printf("Action failed for client %s: %v", c.clientID, err)
+		return
+	}
+
+	snapshot := c.gameSystem.GetSnapshot()
+	c.wsManager.Broadcast(snapshot)
+}
+
+func (c *ClientHandler) sendPong() {
+	pong := struct {
+		Type string `json:"type"`
+	}{Type: "PONG"}
+
+	data, _ := json.Marshal(pong)
+	c.conn.WriteMessage(websocket.TextMessage, data)
 }

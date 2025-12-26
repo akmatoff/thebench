@@ -1,9 +1,8 @@
 export type Bench = {
   id: string;
   witnessCount: number;
-  sitters: [Participant | null, Participant | null];
+  sitters: [Participant | null, Participant | null] | null;
   isTaken: boolean;
-  atmosphere: Atmosphere;
   lastGesture: Gesture | null;
 };
 
@@ -27,7 +26,21 @@ export type Gesture = {
   performedAt: string;
 };
 
-export type BenchMessage = {
-  type: string;
+export type GameMessage = {
+  type: "PING" | "ACTION";
   payload?: any;
+};
+
+export type Player = {
+  id: string;
+  role: PlayerRole;
+  state: PlayerState;
+};
+
+export type PlayerState = "idle" | "smoking";
+export type PlayerRole = "sitter" | "witness";
+
+export type GameState = {
+  players: Map<string, Player>;
+  bench: Bench;
 };
