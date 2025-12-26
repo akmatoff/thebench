@@ -28,6 +28,7 @@ func NewPlayer(id string, role PlayerRole) *Player {
 		ID:       id,
 		Role:     role,
 		JoinedAt: time.Now(),
+		State:    StateIdle,
 	}
 }
 

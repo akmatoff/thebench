@@ -68,6 +68,8 @@ func (gs *GameSystem) GetSnapshot() GameState {
 		}
 	}
 
+	gs.Game.UpdateWitnessCount()
+
 	return GameState{
 		Players: playersDTO,
 		Bench: BenchDTO{

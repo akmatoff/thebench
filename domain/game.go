@@ -31,11 +31,37 @@ func (g *Game) Sit(playerID string) error {
 	if player == nil {
 		return errors.ErrPlayerNotFound
 	}
-	return g.Bench.Sit(player)
+	if player.Role == Sitter {
+		return errors.ErrAlreadySitting
+	}
+
+	if !g.Bench.CanSit() {
+		return errors.ErrBenchFull
+	}
+
+	if g.Bench.Sitters[0] == nil {
+		g.Bench.Sitters[0] = player
+	} else {
+		g.Bench.Sitters[1] = player
+	}
+
+	g.Bench.IsTaken = true
+
+	player.Role = Sitter
+	player.State = StateIdle
+
+	return nil
 }
 
 func (g *Game) Leave(playerID string) {
-	g.Bench.Leave(playerID)
+	for i, p := range g.Bench.Sitters {
+		if p != nil && p.ID == playerID {
+			g.Bench.Sitters[i] = nil
+		}
+	}
+
+	g.Bench.IsTaken = g.Bench.Sitters[0] != nil || g.Bench.Sitters[1] != nil
+
 	if p := g.Players[playerID]; p != nil {
 		p.Role = Witness
 		p.State = StateIdle
@@ -53,7 +79,7 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 
 	case ActionSmoke:
 		if player.Role == Sitter {
-			g.Bench.RecordGesture(NewGesture(ActionSmoke, playerID))
+			g.RecordGesture(NewGesture(ActionSmoke, playerID))
 		}
 
 		player.State = StateSmoking
@@ -68,11 +94,27 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		if player.Role != Sitter {
 			return errors.ErrNotSitter
 		}
-		g.Bench.RecordGesture(NewGesture(action, playerID))
+		g.RecordGesture(NewGesture(action, playerID))
 
 	default:
 		return errors.ErrUnknownAction
 	}
 
 	return nil
+}
+
+func (g *Game) RecordGesture(gesture *Gesture) {
+	g.Bench.LastGesture = gesture
+}
+
+func (g *Game) UpdateWitnessCount() {
+	count := 0
+
+	for _, p := range g.Players {
+		if p.Role == Witness {
+			count++
+		}
+	}
+
+	g.Bench.WitnessCount = count
 }
