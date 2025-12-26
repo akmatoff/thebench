@@ -4,15 +4,16 @@ import { BaseScene } from "../core/BaseScene";
 import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
 import { Background } from "../components/background";
+import { PlayerSystem } from "../core/systems/PlayerSystem";
 
 export class ParkScene extends BaseScene {
   private bench!: Bench;
-  // private nightFilter!: ColorMatrixFilter;
-  // private nightOverlay!: Graphics;
   private background!: Background;
 
   private streetLamp!: StreetLamp;
   private sky!: Sky;
+
+  private playerSystem!: PlayerSystem;
 
   async init() {
     this.sky = new Sky(this.game.app.screen.width, this.game.app.screen.height);
@@ -36,29 +37,14 @@ export class ParkScene extends BaseScene {
 
     this.container.addChild(this.streetLamp);
 
-    // this.nightFilter = new ColorMatrixFilter();
-    // this.applyNight();
-
     this.container.filters = [];
+
+    this.playerSystem = new PlayerSystem(this.game, this.container);
   }
-
-  // private applyNight() {
-  //   this.nightFilter.reset();
-
-  //   this.nightFilter.brightness(0.8, false);
-  //   this.nightFilter.contrast(-0.1, false);
-  //   this.nightFilter.saturate(-0.2, true);
-
-  //   this.nightOverlay = new Graphics();
-  //   this.nightOverlay
-  //     .rect(0, 0, this.game.app.screen.width, this.game.app.screen.height)
-  //     .fill("#3b3c4131");
-  //   this.nightOverlay.zIndex = 9999;
-  //   this.container.addChild(this.nightOverlay);
-  // }
 
   update(ticker: Ticker) {
     this.streetLamp.update(ticker);
     this.sky.update(ticker);
+    this.playerSystem.onStateUpdate(this.game.state.snapshot!);
   }
 }

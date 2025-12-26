@@ -6,12 +6,22 @@ export class GameState {
 
   private actionQueue: { action: Action; timestamp: number }[] = [];
 
+  private onUpdate: ((snapshot: GameStateSnapshot) => void) | null = null;
+
   get snapshot(): GameStateSnapshot | null {
     return this._snapshot;
   }
 
+  setOnUpdate(callback: (snapshot: GameStateSnapshot) => void): void {
+    this.onUpdate = callback;
+  }
+
   applyServerUpdate(snapshot: GameStateSnapshot): void {
     this._snapshot = snapshot;
+
+    if (this.onUpdate) {
+      this.onUpdate(snapshot);
+    }
   }
 
   enqueueAction(action: Action): void {

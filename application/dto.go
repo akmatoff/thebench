@@ -6,9 +6,12 @@ type GameState struct {
 }
 
 type PlayerDTO struct {
-	ID    string `json:"id"`
-	Role  string `json:"role"`
-	State string `json:"state"`
+	ID       string `json:"id"`
+	Role     string `json:"role"`
+	State    string `json:"state"`
+	Position struct {
+		X float64 `json:"x"`
+	} `json:"position"`
 }
 
 type BenchDTO struct {

@@ -1,4 +1,4 @@
-import { GameMessage } from "../types/socket";
+import { GameIncomingMessage } from "../types/socket";
 
 export class GameSocketClient {
   private url: string;
@@ -9,9 +9,10 @@ export class GameSocketClient {
   private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
 
   private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
-  private readonly heartbeatIntervalMs = 5000;
+  private readonly heartbeatIntervalMs = 10000;
 
-  private onMessageHandler: ((message: GameMessage) => void) | null = null;
+  private onMessageHandler: ((message: GameIncomingMessage) => void) | null =
+    null;
   private onErrorHandler: (() => void) | null = null;
   private onCloseHandler: (() => void) | null = null;
   private onOpenHandler: (() => void) | null = null;
@@ -78,7 +79,7 @@ export class GameSocketClient {
     }, 1000);
   }
 
-  send(message: GameMessage) {
+  send(message: GameIncomingMessage) {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message));
     } else {
@@ -104,7 +105,7 @@ export class GameSocketClient {
     this.onOpenHandler = handler;
   }
 
-  onMessage(handler: (message: GameMessage) => void) {
+  onMessage(handler: (message: GameIncomingMessage) => void) {
     this.onMessageHandler = handler;
   }
 

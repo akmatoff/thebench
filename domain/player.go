@@ -21,6 +21,11 @@ type Player struct {
 	Role     PlayerRole
 	JoinedAt time.Time
 	State    PlayerState
+	Position PlayerPosition
+}
+
+type PlayerPosition struct {
+	X float64
 }
 
 func NewPlayer(id string, role PlayerRole) *Player {
@@ -29,6 +34,7 @@ func NewPlayer(id string, role PlayerRole) *Player {
 		Role:     role,
 		JoinedAt: time.Now(),
 		State:    StateIdle,
+		Position: PlayerPosition{X: 10},
 	}
 }
 
