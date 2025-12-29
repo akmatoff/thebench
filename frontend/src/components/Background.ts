@@ -1,12 +1,10 @@
 import { Assets, Sprite } from "pixi.js";
 
-import textureUrl from "../assets/sprites/bg-landscape.png";
-
-const texture = await Assets.load(textureUrl);
-
 export class Background extends Sprite {
   constructor(height: number) {
     super();
+
+    const texture = Assets.get("background");
 
     this.texture = texture;
     this.height = height;

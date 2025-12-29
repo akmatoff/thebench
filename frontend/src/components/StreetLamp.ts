@@ -1,12 +1,6 @@
 import { Assets, Container, Sprite, Ticker } from "pixi.js";
 import { GlowFilter } from "pixi-filters";
 
-import baseTextureSrc from "../assets/sprites/street-lamp.png";
-import bulbTextureSrc from "../assets/sprites/street-lamp-bulb.png";
-
-const baseTexture = await Assets.load(baseTextureSrc);
-const bulbTexture = await Assets.load(bulbTextureSrc);
-
 export class StreetLamp extends Container {
   private base: Sprite;
   private bulb: Sprite;
@@ -14,6 +8,10 @@ export class StreetLamp extends Container {
 
   constructor() {
     super();
+
+    const baseTexture = Assets.get("streetLamp");
+    const bulbTexture = Assets.get("streetLampBulb");
+
     this.base = new Sprite(baseTexture);
     this.bulb = new Sprite(bulbTexture);
     this.addChild(this.base);

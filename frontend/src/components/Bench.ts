@@ -1,9 +1,9 @@
 import { Assets, Sprite } from "pixi.js";
 
-const texture = await Assets.load("/assets/the-bench.png");
-
 export class Bench extends Sprite {
   constructor() {
+    const texture = Assets.get("bench");
+
     super(texture);
 
     this.scale.set(1.5);

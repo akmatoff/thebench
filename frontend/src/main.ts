@@ -1,12 +1,12 @@
 import { Application } from "pixi.js";
 import "@pixi/layout";
-import { loadAssets } from "./loaders/assetLoader";
 import { Game } from "./core/Game";
 import { ParkScene } from "./scenes/ParkScene";
 import { AudioManager } from "./core/AudioManager";
+import { preloadAssets } from "./loaders/assetLoader";
 
 (async () => {
-  await loadAssets();
+  await preloadAssets();
 
   const app = new Application();
 

@@ -3,7 +3,7 @@ import { Bench } from "../components/Bench";
 import { BaseScene } from "../core/BaseScene";
 import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
-import { Background } from "../components/background";
+import { Background } from "../components/Background";
 import { PlayerSystem } from "../core/systems/PlayerSystem";
 
 export class ParkScene extends BaseScene {

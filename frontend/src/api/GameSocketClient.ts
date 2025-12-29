@@ -1,4 +1,4 @@
-import { GameIncomingMessage } from "../types/socket";
+import { GameIncomingMessage, GameOutgoingMessage } from "../types/socket";
 
 export class GameSocketClient {
   private url: string;
@@ -79,7 +79,7 @@ export class GameSocketClient {
     }, 1000);
   }
 
-  send(message: GameIncomingMessage) {
+  send(message: GameOutgoingMessage) {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message));
     } else {

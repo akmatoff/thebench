@@ -6,8 +6,6 @@ import {
   SpritesheetData,
 } from "pixi.js";
 
-import textureUrl from "../assets/sprites/player-spritesheet.png";
-
 const spritesheetData: SpritesheetData = {
   frames: {
     idle1: { frame: { x: 0, y: 0, w: 512, h: 512 } },
@@ -18,13 +16,11 @@ const spritesheetData: SpritesheetData = {
     idle: ["idle1", "idle2", "idle3"],
   },
   meta: {
-    image: textureUrl,
+    image: "player-spritesheet.png",
     size: { w: 1536, h: 512 },
     scale: 0,
   },
 };
-
-const texture = await Assets.load(spritesheetData.meta.image!);
 
 export class Player extends Container {
   sprite!: AnimatedSprite;
@@ -35,6 +31,8 @@ export class Player extends Container {
   }
 
   async init() {
+    const texture = Assets.get("player");
+
     const spritesheet = new Spritesheet(texture, spritesheetData);
 
     await spritesheet.parse();
