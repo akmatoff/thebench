@@ -44,6 +44,8 @@ export class ParkScene extends BaseScene {
     ];
 
     this.playerSystem = new PlayerSystem(this.game, this.container);
+
+    this.game.input.activate(this);
   }
 
   update(ticker: Ticker) {

@@ -7,3 +7,11 @@ export type GameState = {
 };
 
 export type Action = "smoke" | "sit" | "leave" | "wave" | "pat";
+
+export enum Intent {
+  Smoke = "smoke",
+  Sit = "sit",
+  Leave = "leave",
+  Wave = "wave",
+  Pat = "pat",
+}

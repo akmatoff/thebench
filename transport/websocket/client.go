@@ -63,14 +63,14 @@ func (c *ClientHandler) listen() {
 			c.sendPong()
 
 		case "ACTION":
-			c.handleAction(message.Payload.(struct{ action string }))
+			c.handleAction(message.Payload)
 		}
 
 	}
 }
 
-func (c *ClientHandler) handleAction(payload struct{ action string }) {
-	action := domain.Action(payload.action)
+func (c *ClientHandler) handleAction(payload any) {
+	action := domain.Action(payload.(struct{ action string }).action)
 
 	validActions := map[domain.Action]bool{
 		domain.ActionSit:   true,
