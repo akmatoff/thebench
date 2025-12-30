@@ -47,6 +47,7 @@ export class Game {
 
   private update(delta: Ticker) {
     this.currentScene?.update(delta);
+    this.playerSystem.updateMovement(delta.deltaTime);
   }
 
   sendAction(action: Action) {

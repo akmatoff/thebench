@@ -12,7 +12,9 @@ export type Action =
   | "sit"
   | "leave"
   | "wave"
-  | "pat";
+  | "pat"
+  | "move_left"
+  | "move_right";
 
 export enum Intent {
   Smoke = "smoke",

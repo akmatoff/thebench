@@ -102,6 +102,10 @@ func (c *ClientHandler) handleAction(actionStr string) {
 		return
 	}
 
+	for _, p := range c.gameSystem.GetSnapshot().Players {
+		log.Printf("Player position x: %v", p.Position.X)
+	}
+
 	snapshot := c.gameSystem.GetSnapshot()
 	message := infra.NewOutgoingMessage(infra.STATE, snapshot)
 

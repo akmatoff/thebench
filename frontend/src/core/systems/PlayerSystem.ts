@@ -1,7 +1,7 @@
 import { Container } from "pixi.js";
 import { GameState } from "../GameState";
 import { Game } from "../Game";
-import { MovementDirection, Player as PlayerType } from "../../types/player";
+import { MovementDirection } from "../../types/player";
 import { GameStateSnapshot } from "../../types/messages";
 import { Player } from "../../components/Player";
 
@@ -31,6 +31,7 @@ export class PlayerSystem {
   private syncPlayers(snapshot: GameStateSnapshot): void {
     const players = snapshot.players;
 
+    // Remove player if not in snapshot
     for (const [id, player] of this.players) {
       if (!players[id]) {
         this.removePlayer(id);
@@ -40,10 +41,19 @@ export class PlayerSystem {
     for (const [id, player] of Object.entries(players)) {
       let playerSprite = this.players.get(id);
 
+      // Initial player, create player sprite and sync positions
       if (!playerSprite) {
         playerSprite = new Player();
         this.players.set(id, playerSprite);
         this.sceneContainer!.addChild(playerSprite);
+
+        if (player.position) {
+          playerSprite.x = player.position.x;
+        }
+      }
+
+      if (id !== this.game.playerId) {
+        playerSprite.x = player.position.x;
       }
     }
   }
@@ -74,9 +84,11 @@ export class PlayerSystem {
     switch (this.currentMovementDirection) {
       case "left":
         player.x -= this.movementSpeed * delta;
+        this.game.sendAction("move_left");
         break;
       case "right":
         player.x += this.movementSpeed * delta;
+        this.game.sendAction("move_right");
         break;
     }
 

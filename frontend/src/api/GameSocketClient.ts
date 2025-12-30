@@ -9,7 +9,7 @@ export class GameSocketClient {
   private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
 
   private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
-  private readonly heartbeatIntervalMs = 10000;
+  private readonly heartbeatIntervalMs = 15_000;
 
   private onMessageHandler: ((message: GameIncomingMessage) => void) | null =
     null;

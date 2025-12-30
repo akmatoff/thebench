@@ -50,6 +50,9 @@ func (gs *GameSystem) GetSnapshot() GameState {
 			ID:    player.ID,
 			Role:  string(player.Role),
 			State: string(player.State),
+			Position: PlayerPositionDTO{
+				X: player.Position.X,
+			},
 		}
 	}
 
