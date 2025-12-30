@@ -48,6 +48,10 @@ export class Game {
   private update(delta: Ticker) {
     this.currentScene?.update(delta);
     this.playerSystem.updateMovement(delta.deltaTime);
+
+    if (this.state.snapshot) {
+      this.playerSystem.onStateUpdate(this.state.snapshot);
+    }
   }
 
   sendAction(action: Action) {

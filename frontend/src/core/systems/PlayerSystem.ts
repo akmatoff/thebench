@@ -28,7 +28,7 @@ export class PlayerSystem {
     this.syncPlayers(snapshot);
   }
 
-  private syncPlayers(snapshot: GameStateSnapshot): void {
+  syncPlayers(snapshot: GameStateSnapshot): void {
     const players = snapshot.players;
 
     // Remove player if not in snapshot
