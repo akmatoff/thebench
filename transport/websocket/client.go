@@ -88,6 +88,8 @@ func (c *ClientHandler) handleAction(actionStr string) {
 		domain.ActionStopSmoking: true,
 		domain.ActionWave:        true,
 		domain.ActionPat:         true,
+		domain.ActionMoveLeft:    true,
+		domain.ActionMoveRight:   true,
 	}
 
 	if !validActions[action] {

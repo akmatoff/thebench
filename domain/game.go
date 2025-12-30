@@ -9,6 +9,8 @@ type Game struct {
 	Bench   *Bench
 }
 
+const MOVEMENT_SPEED = 4
+
 func NewGame() *Game {
 	return &Game{
 		Players: make(map[string]*Player),
@@ -100,6 +102,24 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 			return errors.ErrNotSitter
 		}
 		g.RecordGesture(NewGesture(action, playerID))
+
+	case ActionMoveLeft:
+		if player.Role == Sitter {
+			return nil
+		}
+
+		player.Position.X -= MOVEMENT_SPEED
+
+		if player.Position.X < 0 {
+			player.Position.X = 0
+		}
+
+	case ActionMoveRight:
+		if player.Role == Sitter {
+			return nil
+		}
+
+		player.Position.X += MOVEMENT_SPEED
 
 	default:
 		return errors.ErrUnknownAction

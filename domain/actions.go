@@ -9,4 +9,6 @@ const (
 	ActionStopSmoking Action = "stop_smoking"
 	ActionWave        Action = "wave"
 	ActionPat         Action = "pat"
+	ActionMoveLeft    Action = "move_left"
+	ActionMoveRight   Action = "move_right"
 )
