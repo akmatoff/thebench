@@ -6,7 +6,13 @@ export type GameState = {
   bench: Bench;
 };
 
-export type Action = "smoke" | "sit" | "leave" | "wave" | "pat";
+export type Action =
+  | "smoke"
+  | "stop_smoking"
+  | "sit"
+  | "leave"
+  | "wave"
+  | "pat";
 
 export enum Intent {
   Smoke = "smoke",

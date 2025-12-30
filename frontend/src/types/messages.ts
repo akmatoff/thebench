@@ -13,7 +13,7 @@ export type ActionPayload = {
 };
 
 export type GameStateSnapshot = {
-  players: Map<string, Player>;
+  players: Record<string, Player>;
   bench: Bench;
 };
 

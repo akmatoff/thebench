@@ -62,8 +62,14 @@ export class InputSystem {
   private handleIntent(intent: Intent) {
     switch (intent) {
       case Intent.Smoke:
-        console.log("smoking");
-        this.game.sendAction("smoke");
+        const currentPlayer = this.game.getCurrentPlayerState();
+
+        if (currentPlayer?.state === "smoking") {
+          this.game.sendAction("stop_smoking");
+        } else {
+          this.game.sendAction("smoke");
+        }
+
         break;
     }
   }

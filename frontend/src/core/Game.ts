@@ -53,6 +53,11 @@ export class Game {
     this.playerId = id;
   }
 
+  getCurrentPlayerState() {
+    if (!this.state.snapshot || !this.playerId) return;
+    return this.state.snapshot.players[this.playerId];
+  }
+
   destroy(): void {
     this.app.ticker.remove(this.update, this);
     this.currentScene?.destroy();

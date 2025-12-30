@@ -84,6 +84,9 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 
 		player.State = StateSmoking
 
+	case ActionStopSmoking:
+		player.State = StateIdle
+
 	case ActionSit:
 		return g.Sit(playerID)
 

@@ -82,11 +82,12 @@ func (c *ClientHandler) handleAction(actionStr string) {
 	action := domain.Action(actionStr)
 
 	validActions := map[domain.Action]bool{
-		domain.ActionSit:   true,
-		domain.ActionLeave: true,
-		domain.ActionSmoke: true,
-		domain.ActionWave:  true,
-		domain.ActionPat:   true,
+		domain.ActionSit:         true,
+		domain.ActionLeave:       true,
+		domain.ActionSmoke:       true,
+		domain.ActionStopSmoking: true,
+		domain.ActionWave:        true,
+		domain.ActionPat:         true,
 	}
 
 	if !validActions[action] {
