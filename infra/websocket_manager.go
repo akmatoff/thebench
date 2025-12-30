@@ -49,11 +49,11 @@ func (wm *WebSocketManager) RemoveClient(id string) {
 	}
 }
 
-func (wm *WebSocketManager) Broadcast(snapshot any) {
+func (wm *WebSocketManager) Broadcast(message OutgoingMessage) {
 	wm.mu.RLock()
 	defer wm.mu.RUnlock()
 
-	data, err := json.Marshal(snapshot)
+	data, err := json.Marshal(message)
 	if err != nil {
 		log.Printf("broadcast marshal error: %v", err)
 		return
@@ -66,7 +66,7 @@ func (wm *WebSocketManager) Broadcast(snapshot any) {
 	}
 }
 
-func (wm *WebSocketManager) SendToClient(clientID string, msg any) {
+func (wm *WebSocketManager) SendToClient(clientID string, msg OutgoingMessage) {
 	wm.mu.RLock()
 	defer wm.mu.RUnlock()
 

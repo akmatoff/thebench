@@ -38,9 +38,16 @@ func (c *ClientHandler) listen() {
 		log.Printf("Client %s disconnected", c.clientID)
 	}()
 
-	snapshot := c.gameSystem.GetSnapshot()
+	connectedMessage := infra.NewOutgoingMessage(infra.CONNECTED, infra.ConnectedMessage{
+		PlayerID: c.clientID,
+	})
 
-	c.wsManager.SendToClient(c.clientID, snapshot)
+	c.wsManager.SendToClient(c.clientID, connectedMessage)
+
+	snapshot := c.gameSystem.GetSnapshot()
+	stateMessage := infra.NewOutgoingMessage(infra.STATE, snapshot)
+
+	c.wsManager.SendToClient(c.clientID, stateMessage)
 
 	for {
 		_, raw, err := c.conn.ReadMessage()
@@ -51,26 +58,28 @@ func (c *ClientHandler) listen() {
 			return
 		}
 
-		var message IncommingMessage
-		if err := json.Unmarshal(raw, &message); err != nil {
-			log.Printf("unmarshal error for client %s: %v", c.clientID, err)
-			continue
+		message, err := infra.ParseIncomingMessage(raw)
+		if err != nil {
+			log.Printf("parse error for client %s: %v", c.clientID, err)
+			return
 		}
 
-		switch message.Type {
+		switch m := message.(type) {
 
-		case "PING":
+		case infra.PingMessage:
 			c.sendPong()
 
-		case "ACTION":
-			c.handleAction(message.Payload)
-		}
+		case infra.ActionMessage:
+			c.handleAction(m.Action)
 
+		default:
+			log.Println("Uknown message")
+		}
 	}
 }
 
-func (c *ClientHandler) handleAction(payload any) {
-	action := domain.Action(payload.(struct{ action string }).action)
+func (c *ClientHandler) handleAction(actionStr string) {
+	action := domain.Action(actionStr)
 
 	validActions := map[domain.Action]bool{
 		domain.ActionSit:   true,
@@ -91,7 +100,9 @@ func (c *ClientHandler) handleAction(payload any) {
 	}
 
 	snapshot := c.gameSystem.GetSnapshot()
-	c.wsManager.Broadcast(snapshot)
+	message := infra.NewOutgoingMessage(infra.STATE, snapshot)
+
+	c.wsManager.Broadcast(message)
 }
 
 func (c *ClientHandler) sendPong() {
