@@ -2,7 +2,7 @@ import { Container } from "pixi.js";
 import { GameState } from "../GameState";
 import { Game } from "../Game";
 import { Player as PlayerType } from "../../types/player";
-import { GameStateSnapshot } from "../../types/socket";
+import { GameStateSnapshot } from "../../types/messages";
 import { Player } from "../../components/Player";
 
 export class PlayerSystem {

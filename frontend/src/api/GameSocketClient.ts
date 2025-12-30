@@ -1,4 +1,4 @@
-import { GameIncomingMessage, GameOutgoingMessage } from "../types/socket";
+import { GameIncomingMessage, GameOutgoingMessage } from "../types/messages";
 
 export class GameSocketClient {
   private url: string;

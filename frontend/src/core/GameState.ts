@@ -1,5 +1,5 @@
 import { Action } from "../types/game";
-import { GameStateSnapshot } from "../types/socket";
+import { GameStateSnapshot } from "../types/messages";
 
 export class GameState {
   private _snapshot: GameStateSnapshot | null = null;

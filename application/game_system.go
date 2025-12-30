@@ -1,6 +1,7 @@
 package application
 
 import (
+	"log"
 	"sync"
 	"time"
 
@@ -33,6 +34,8 @@ func (gs *GameSystem) RemovePlayer(id string) {
 func (gs *GameSystem) PerformAction(playerID string, action domain.Action) error {
 	gs.mu.Lock()
 	defer gs.mu.Unlock()
+
+	log.Printf("Player %s performing action %s", playerID, action)
 	return gs.Game.PerformAction(playerID, action)
 }
 

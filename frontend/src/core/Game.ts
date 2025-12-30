@@ -13,6 +13,8 @@ export class Game {
   public audio: AudioManager;
 
   public readonly state: GameState;
+  public playerId: string | null = null;
+
   private socket: GameSocket;
 
   public readonly input: InputSystem;
@@ -23,6 +25,11 @@ export class Game {
 
     this.state = new GameState();
     this.socket = new GameSocket(this.state, WS_URL);
+
+    this.socket.onConnected = (playerId) => {
+      this.setPlayerId(playerId);
+    };
+
     this.input = new InputSystem(this);
   }
 
@@ -40,6 +47,10 @@ export class Game {
 
   sendAction(action: Action) {
     this.socket.sendAction(action);
+  }
+
+  setPlayerId(id: string) {
+    this.playerId = id;
   }
 
   destroy(): void {
