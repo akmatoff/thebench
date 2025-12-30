@@ -1,6 +1,8 @@
 package domain
 
-import "github.com/akmatoff/thebench/errors"
+import (
+	"github.com/akmatoff/thebench/errors"
+)
 
 type Game struct {
 	Players map[string]*Player

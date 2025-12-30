@@ -10,3 +10,5 @@ export type PlayerRole = "sitter" | "witness";
 export type PlayerPosition = {
   x: number;
 };
+
+export type MovementDirection = "left" | "right";

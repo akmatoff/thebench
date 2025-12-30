@@ -1,4 +1,5 @@
 import { Intent } from "../../types/game";
+import { MovementDirection } from "../../types/player";
 import { BaseScene } from "../BaseScene";
 import { Game } from "../Game";
 
@@ -8,12 +9,19 @@ const KEY_BINDINGS: Record<string, Intent> = {
   p: Intent.Pat,
   l: Intent.Leave,
   x: Intent.Smoke,
+  arrowleft: Intent.MoveLeft,
+  arrowright: Intent.MoveRight,
 };
 
 export class InputSystem {
   private game: Game;
   private active = false;
   private activeScene: BaseScene | null = null;
+
+  private movementState = {
+    left: false,
+    right: false,
+  };
 
   constructor(game: Game) {
     this.game = game;
@@ -56,7 +64,22 @@ export class InputSystem {
   };
 
   private handleKeyUp = (event: KeyboardEvent) => {
-    return;
+    const intent = KEY_BINDINGS[event.key.toLowerCase()];
+
+    if (!intent) {
+      return;
+    }
+
+    switch (intent) {
+      case Intent.MoveLeft:
+        this.movementState.left = false;
+        this.updateMovement();
+        break;
+      case Intent.MoveRight:
+        this.movementState.right = false;
+        this.updateMovement();
+        break;
+    }
   };
 
   private handleIntent(intent: Intent) {
@@ -71,6 +94,30 @@ export class InputSystem {
         }
 
         break;
+      case Intent.MoveLeft:
+        this.movementState.left = true;
+        this.updateMovement();
+        break;
+      case Intent.MoveRight:
+        this.movementState.right = true;
+        this.updateMovement();
+        break;
+    }
+  }
+
+  private updateMovement() {
+    let direction: MovementDirection | null = null;
+
+    if (this.movementState.left) {
+      direction = "left";
+    } else if (this.movementState.right) {
+      direction = "right";
+    }
+
+    if (direction) {
+      this.game.movePlayer(direction);
+    } else {
+      this.game.stopPlayerMovement();
     }
   }
 

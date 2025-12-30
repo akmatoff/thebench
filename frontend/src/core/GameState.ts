@@ -1,5 +1,6 @@
 import { Action } from "../types/game";
 import { GameStateSnapshot } from "../types/messages";
+import { MovementDirection } from "../types/player";
 
 export class GameState {
   private _snapshot: GameStateSnapshot | null = null;
@@ -26,6 +27,10 @@ export class GameState {
 
   enqueueAction(action: Action): void {
     this.actionQueue.push({ action, timestamp: Date.now() });
+  }
+
+  handleMovement(direction: MovementDirection) {
+    if (!this._snapshot) return;
   }
 
   reset(): void {

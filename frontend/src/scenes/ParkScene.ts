@@ -4,7 +4,6 @@ import { BaseScene } from "../core/BaseScene";
 import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
 import { Background } from "../components/Background";
-import { PlayerSystem } from "../core/systems/PlayerSystem";
 
 export class ParkScene extends BaseScene {
   private bench!: Bench;
@@ -12,8 +11,6 @@ export class ParkScene extends BaseScene {
 
   private streetLamp!: StreetLamp;
   private sky!: Sky;
-
-  private playerSystem!: PlayerSystem;
 
   async init() {
     this.sky = new Sky(this.game.app.screen.width, this.game.app.screen.height);
@@ -43,7 +40,7 @@ export class ParkScene extends BaseScene {
       }),
     ];
 
-    this.playerSystem = new PlayerSystem(this.game, this.container);
+    this.game.playerSystem.setSceneContainer(this.container);
 
     this.game.input.activate(this);
   }
@@ -51,6 +48,6 @@ export class ParkScene extends BaseScene {
   update(ticker: Ticker) {
     this.streetLamp.update(ticker);
     this.sky.update(ticker);
-    this.playerSystem.onStateUpdate(this.game.state.snapshot!);
+    this.game.playerSystem.updateMovement(ticker.deltaTime);
   }
 }

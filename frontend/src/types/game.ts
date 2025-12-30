@@ -20,4 +20,6 @@ export enum Intent {
   Leave = "leave",
   Wave = "wave",
   Pat = "pat",
+  MoveLeft = "move_left",
+  MoveRight = "move_right",
 }

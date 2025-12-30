@@ -6,6 +6,8 @@ import { GameSocket } from "./GameSocket";
 import { WS_URL } from "../config";
 import { Action } from "../types/game";
 import { InputSystem } from "./systems/InputSystem";
+import { MovementDirection } from "../types/player";
+import { PlayerSystem } from "./systems/PlayerSystem";
 
 export class Game {
   public app: Application;
@@ -18,6 +20,7 @@ export class Game {
   private socket: GameSocket;
 
   public readonly input: InputSystem;
+  public readonly playerSystem: PlayerSystem;
 
   constructor(app: Application, audio: AudioManager) {
     this.app = app;
@@ -25,6 +28,7 @@ export class Game {
 
     this.state = new GameState();
     this.socket = new GameSocket(this.state, WS_URL);
+    this.playerSystem = new PlayerSystem(this);
 
     this.socket.onConnected = (playerId) => {
       this.setPlayerId(playerId);
@@ -51,6 +55,14 @@ export class Game {
 
   setPlayerId(id: string) {
     this.playerId = id;
+  }
+
+  movePlayer(direction: MovementDirection) {
+    this.playerSystem.setMovementDirection(direction);
+  }
+
+  stopPlayerMovement() {
+    this.playerSystem.stopMovement();
   }
 
   getCurrentPlayerState() {
