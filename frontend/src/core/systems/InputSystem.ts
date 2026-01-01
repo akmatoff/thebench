@@ -83,10 +83,10 @@ export class InputSystem {
   };
 
   private handleIntent(intent: Intent) {
+    const currentPlayer = this.game.getCurrentPlayerState();
+
     switch (intent) {
       case Intent.Smoke:
-        const currentPlayer = this.game.getCurrentPlayerState();
-
         if (
           currentPlayer?.state === "standing_smoking" ||
           currentPlayer?.state === "sitting_smoking"
