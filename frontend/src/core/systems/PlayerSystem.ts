@@ -11,7 +11,7 @@ export class PlayerSystem {
   private game: Game;
 
   private currentMovementDirection: MovementDirection | null = null;
-  private movementSpeed = 0.8;
+  private movementSpeed = 1;
 
   private players: Map<string, Player> = new Map();
 
@@ -47,10 +47,15 @@ export class PlayerSystem {
         this.players.set(id, playerSprite);
         this.sceneContainer!.addChild(playerSprite);
 
+        playerSprite.position.y = this.game.app.screen.height - 200;
+
         if (player.position) {
           playerSprite.x = player.position.x;
         }
       }
+
+      playerSprite.setAnimation(player.state);
+      playerSprite.setFacing(player.facing);
 
       if (id !== this.game.playerId) {
         playerSprite.x = player.position.x;

@@ -11,7 +11,6 @@ type PlayerDTO struct {
 	State    string            `json:"state"`
 	Position PlayerPositionDTO `json:"position"`
 	Facing   string            `json:"facing"`
-	IsMoving bool              `json:"isMoving"`
 }
 
 type PlayerPositionDTO struct {

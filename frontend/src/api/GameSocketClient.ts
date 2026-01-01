@@ -35,8 +35,6 @@ export class GameSocketClient {
       try {
         const data = JSON.parse(event.data);
         this.onMessageHandler?.(data);
-
-        console.log(data);
       } catch (e) {
         console.error("Failed to parse event message:", event.data, e);
       }

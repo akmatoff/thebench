@@ -1,5 +1,5 @@
 import { Bench } from "./bench";
-import { Action, GameState } from "./game";
+import { Action } from "./game";
 import { Player } from "./player";
 
 export type MessageType = "PING" | "PONG" | "ACTION" | "CONNECTED" | "STATE";

@@ -6,6 +6,7 @@ import {
   SpritesheetData,
   Texture,
 } from "pixi.js";
+import { PlayerFacing, PlayerState } from "../types/player";
 
 const spritesheetData: SpritesheetData = {
   frames: {
@@ -29,18 +30,25 @@ const spritesheetData: SpritesheetData = {
       "walking5",
       "walking6",
     ],
+    sitting: [],
+    sitting_smoking: [],
+    standing_smoking: [],
   },
   meta: {
     image: "player-spritesheet.png",
     size: { w: 1440, h: 720 },
-    scale: 0,
+    scale: 1,
   },
 };
 
 export class Player extends Container {
   sprite!: AnimatedSprite;
-  private currentAnimation: "idle" | "walking" = "idle";
+  private currentAnimation: PlayerState = "idle";
   private spritesheet!: Spritesheet;
+  private animationTextures: Record<string, Texture[]> = {};
+
+  facing: PlayerFacing = "right";
+
   constructor() {
     super();
 
@@ -54,43 +62,66 @@ export class Player extends Container {
 
     await this.spritesheet.parse();
 
-    this.sprite = new AnimatedSprite(this.spritesheet.animations.idle);
+    for (const [name, frames] of Object.entries(spritesheetData.animations!)) {
+      if (frames.length === 0) {
+        // Skip empty animations
+        this.animationTextures[name] = [];
+        continue;
+      }
 
+      this.animationTextures[name] = frames.map(
+        (name) => this.spritesheet.textures[name]
+      );
+    }
+
+    this.sprite = new AnimatedSprite(this.animationTextures.idle);
     this.sprite.loop = true;
 
     this.addChild(this.sprite);
-    this.position.set(0, 580);
+    this.sprite.anchor.set(0.5);
 
     this.setAnimation("idle");
   }
 
-  setAnimation(name: "idle" | "walking") {
-    if (this.currentAnimation === name) {
+  setAnimation(state: PlayerState) {
+    if (this.currentAnimation === state) {
       return;
     }
 
-    const frames = this.spritesheet.animations[name];
+    const frames = this.spritesheet.animations[state];
 
     if (!frames) {
-      console.warn("No frames found for animation:", name);
+      console.warn("No animation frames found for state:", state);
       return;
     }
 
-    const textures: Texture[] = frames.map((frame) => {
-      if (!frame) {
-        console.error("Frame is null:", frame);
-      }
-      return frame;
-    });
+    const textures = this.animationTextures[state];
 
-    this.sprite.textures = textures;
-    this.sprite.animationSpeed = name === "walking" ? 0.09 : 0.5;
-
-    if (!this.sprite.playing) {
-      this.sprite.gotoAndPlay(0);
+    if (!textures) {
+      console.warn("No animation textures found for state:", state);
+      return;
     }
 
-    this.currentAnimation = name;
+    this.sprite.textures = textures;
+
+    switch (state) {
+      case "idle":
+        this.sprite.animationSpeed = 0.05;
+        break;
+      case "walking":
+        this.sprite.animationSpeed = 0.11;
+        break;
+      default:
+        this.sprite.animationSpeed = 0.1;
+    }
+
+    this.sprite.gotoAndPlay(0);
+    this.currentAnimation = state;
+  }
+
+  setFacing(facing: PlayerFacing) {
+    this.facing = facing;
+    this.scale.x = facing === "left" ? -1 : 1;
   }
 
   idle() {

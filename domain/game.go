@@ -12,7 +12,7 @@ type Game struct {
 }
 
 const (
-	MOVEMENT_SPEED  = 0.8
+	MOVEMENT_SPEED  = 1
 	WALKING_TIMEOUT = 200 * time.Millisecond
 )
 

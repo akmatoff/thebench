@@ -4,12 +4,17 @@ export type Player = {
   state: PlayerState;
   position: PlayerPosition;
   facing: PlayerFacing;
-  isMoving: boolean;
 };
 
 export type PlayerFacing = "left" | "right";
 
-export type PlayerState = "idle" | "smoking" | "walking";
+export type PlayerState =
+  | "idle"
+  | "standing_smoking"
+  | "sitting_smoking"
+  | "sitting"
+  | "walking";
+
 export type PlayerRole = "sitter" | "witness";
 export type PlayerPosition = {
   x: number;
