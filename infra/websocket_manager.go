@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"log"
 	"sync"
+	"time"
 
+	"github.com/akmatoff/thebench/application"
 	"github.com/akmatoff/thebench/domain"
 	"github.com/gorilla/websocket"
 )
@@ -77,4 +79,18 @@ func (wm *WebSocketManager) SendToClient(clientID string, msg OutgoingMessage) {
 
 	data, _ := json.Marshal(msg)
 	client.Conn.WriteMessage(websocket.TextMessage, data)
+}
+
+func (wm *WebSocketManager) StartBroadcastLoop(gameSystem *application.GameSystem, interval time.Duration) {
+	ticker := time.NewTicker(interval)
+
+	go func() {
+		for range ticker.C {
+			gameSystem.UpdateLogic()
+
+			snapshot := gameSystem.GetSnapshot()
+			message := NewOutgoingMessage(STATE, snapshot)
+			wm.Broadcast(message)
+		}
+	}()
 }

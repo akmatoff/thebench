@@ -106,10 +106,6 @@ func (c *ClientHandler) handleAction(actionStr string) {
 		log.Printf("Player position x: %v", p.Position.X)
 	}
 
-	snapshot := c.gameSystem.GetSnapshot()
-	message := infra.NewOutgoingMessage(infra.STATE, snapshot)
-
-	c.wsManager.Broadcast(message)
 }
 
 func (c *ClientHandler) sendPong() {

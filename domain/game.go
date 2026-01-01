@@ -11,7 +11,10 @@ type Game struct {
 	Bench   *Bench
 }
 
-const MOVEMENT_SPEED = 0.8
+const (
+	MOVEMENT_SPEED  = 0.8
+	WALKING_TIMEOUT = 200 * time.Millisecond
+)
 
 func NewGame() *Game {
 	return &Game{
@@ -158,4 +161,17 @@ func (g *Game) UpdateWitnessCount() {
 	}
 
 	g.Bench.WitnessCount = count
+}
+
+func (g *Game) Update() {
+	now := time.Now()
+
+	for _, p := range g.Players {
+		if p.State == StateWalking {
+			if now.Sub(p.LastMoveAt) > WALKING_TIMEOUT {
+				p.State = StateIdle
+			}
+		}
+	}
+
 }

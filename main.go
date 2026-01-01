@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/akmatoff/thebench/application"
 	"github.com/akmatoff/thebench/infra"
@@ -23,6 +24,8 @@ func main() {
 
 	gameSystem := application.NewGameSystem()
 	wsManager := infra.NewWebSocketManager()
+
+	wsManager.StartBroadcastLoop(gameSystem, 90*time.Millisecond)
 
 	wsHandler := websocket.NewHandler(gameSystem, wsManager)
 

@@ -14,9 +14,18 @@ type GameSystem struct {
 }
 
 func NewGameSystem() *GameSystem {
-	return &GameSystem{
+	gs := &GameSystem{
 		Game: domain.NewGame(),
 	}
+
+	return gs
+}
+
+func (gs *GameSystem) UpdateLogic() {
+	gs.mu.Lock()
+	defer gs.mu.Unlock()
+	gs.Game.Update()
+
 }
 
 func (gs *GameSystem) AddPlayer(p *domain.Player) {
