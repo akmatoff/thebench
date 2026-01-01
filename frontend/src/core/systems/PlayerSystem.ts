@@ -11,7 +11,7 @@ export class PlayerSystem {
   private game: Game;
 
   private currentMovementDirection: MovementDirection | null = null;
-  private movementSpeed = 4;
+  private movementSpeed = 0.8;
 
   private players: Map<string, Player> = new Map();
 

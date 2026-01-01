@@ -9,7 +9,7 @@ type Game struct {
 	Bench   *Bench
 }
 
-const MOVEMENT_SPEED = 4
+const MOVEMENT_SPEED = 0.8
 
 func NewGame() *Game {
 	return &Game{
