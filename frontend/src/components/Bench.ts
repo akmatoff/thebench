@@ -6,11 +6,12 @@ export class Bench extends Sprite {
 
     super(texture);
 
-    this.scale.set(1.5);
     this.anchor.set(0.5);
 
-    this.width = 256;
-    this.height = 256;
+    this.width = 416;
+    this.height = 208;
+
+    this.scale.set(1.3);
 
     this.tint = "#e0806fff";
 

@@ -24,12 +24,12 @@ export class ParkScene extends BaseScene {
     this.bench = new Bench();
     this.bench.position.x = this.game.app.screen.width / 2;
     this.bench.position.y =
-      this.game.app.screen.height - this.bench.height + 40;
+      this.game.app.screen.height - this.bench.height + 130;
 
     this.container.addChild(this.bench);
 
     this.streetLamp = new StreetLamp();
-    this.streetLamp.position.x = this.bench.position.x - this.bench.width * 1.4;
+    this.streetLamp.position.x = this.bench.position.x - this.bench.width * 0.7;
     this.streetLamp.position.y = this.bench.position.y - this.bench.height;
 
     this.container.addChild(this.streetLamp);
