@@ -53,6 +53,7 @@ func (gs *GameSystem) GetSnapshot() GameState {
 			Position: PlayerPositionDTO{
 				X: player.Position.X,
 			},
+			Facing: string(player.Facing),
 		}
 	}
 

@@ -6,9 +6,19 @@ type PlayerRole string
 
 type PlayerState string
 
+type PlayerFacing string
+
 const (
-	StateIdle    PlayerState = "idle"
-	StateSmoking PlayerState = "smoking"
+	FacingLeft  PlayerFacing = "left"
+	FacingRight PlayerFacing = "right"
+)
+
+const (
+	StateIdle            PlayerState = "idle"
+	StateSitting         PlayerState = "sitting"
+	StateSittingSmoking  PlayerState = "sitting_smoking"
+	StateStandingSmoking PlayerState = "standing_smoking"
+	StateWalking         PlayerState = "walking"
 )
 
 const (
@@ -17,11 +27,13 @@ const (
 )
 
 type Player struct {
-	ID       string
-	Role     PlayerRole
-	JoinedAt time.Time
-	State    PlayerState
-	Position PlayerPosition
+	ID         string
+	Role       PlayerRole
+	JoinedAt   time.Time
+	State      PlayerState
+	Position   PlayerPosition
+	Facing     PlayerFacing
+	LastMoveAt time.Time
 }
 
 type PlayerPosition struct {
@@ -30,11 +42,13 @@ type PlayerPosition struct {
 
 func NewPlayer(id string, role PlayerRole) *Player {
 	return &Player{
-		ID:       id,
-		Role:     role,
-		JoinedAt: time.Now(),
-		State:    StateIdle,
-		Position: PlayerPosition{X: 10},
+		ID:         id,
+		Role:       role,
+		JoinedAt:   time.Now(),
+		State:      StateIdle,
+		Position:   PlayerPosition{X: 10},
+		Facing:     FacingRight,
+		LastMoveAt: time.Now(),
 	}
 }
 

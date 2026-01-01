@@ -1,6 +1,8 @@
 package domain
 
 import (
+	"time"
+
 	"github.com/akmatoff/thebench/errors"
 )
 
@@ -82,14 +84,20 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 	switch action {
 
 	case ActionSmoke:
-		if player.Role == Sitter {
+		if player.Role == Sitter && player.State == StateSitting {
+			player.State = StateSittingSmoking
+			g.RecordGesture(NewGesture(ActionSmoke, playerID))
+		} else {
+			player.State = StateStandingSmoking
 			g.RecordGesture(NewGesture(ActionSmoke, playerID))
 		}
 
-		player.State = StateSmoking
-
 	case ActionStopSmoking:
-		player.State = StateIdle
+		if player.Role == Sitter && player.State == StateSittingSmoking {
+			player.State = StateSitting
+		} else {
+			player.State = StateIdle
+		}
 
 	case ActionSit:
 		return g.Sit(playerID)
@@ -104,22 +112,30 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		g.RecordGesture(NewGesture(action, playerID))
 
 	case ActionMoveLeft:
-		if player.Role == Sitter {
+		if player.Role == Sitter || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
 			return nil
 		}
 
+		player.State = StateWalking
+		player.Facing = FacingLeft
 		player.Position.X -= MOVEMENT_SPEED
+
+		player.LastMoveAt = time.Now()
 
 		if player.Position.X < 0 {
 			player.Position.X = 0
 		}
 
 	case ActionMoveRight:
-		if player.Role == Sitter {
+		if player.Role == Sitter || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
 			return nil
 		}
 
+		player.State = StateWalking
+		player.Facing = FacingRight
 		player.Position.X += MOVEMENT_SPEED
+
+		player.LastMoveAt = time.Now()
 
 	default:
 		return errors.ErrUnknownAction
