@@ -5,7 +5,7 @@ import { MovementDirection } from "../../types/player";
 import { GameStateSnapshot } from "../../types/messages";
 import { Player } from "../../components/Player";
 
-export const PLAYER_Y_OFFSET = 200;
+export const PLAYER_Y_OFFSET = 220;
 
 export class PlayerSystem {
   private sceneContainer: Container | null = null;
@@ -88,6 +88,15 @@ export class PlayerSystem {
     const player = this.players.get(playerId);
 
     if (!player) return;
+
+    const currentPlayer = this.game.getCurrentPlayerState();
+
+    if (
+      currentPlayer?.state === "sitting" ||
+      currentPlayer?.role === "sitter"
+    ) {
+      return;
+    }
 
     switch (this.currentMovementDirection) {
       case "left":

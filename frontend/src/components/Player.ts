@@ -19,6 +19,22 @@ const spritesheetData: SpritesheetData = {
     walking4: { frame: { x: 720, y: 360, w: 240, h: 360 } },
     walking5: { frame: { x: 960, y: 360, w: 240, h: 360 } },
     walking6: { frame: { x: 1200, y: 360, w: 240, h: 360 } },
+
+    sitting1: { frame: { x: 0, y: 1080, w: 240, h: 360 } },
+    sitting2: { frame: { x: 240, y: 1080, w: 240, h: 360 } },
+
+    standingSmoking1: { frame: { x: 0, y: 720, w: 240, h: 360 } },
+    standingSmoking2: { frame: { x: 240, y: 720, w: 240, h: 360 } },
+    standingSmoking3: { frame: { x: 480, y: 720, w: 240, h: 360 } },
+    standingSmoking4: { frame: { x: 720, y: 720, w: 240, h: 360 } },
+    standingSmoking5: { frame: { x: 960, y: 720, w: 240, h: 360 } },
+    standingSmoking6: { frame: { x: 1200, y: 720, w: 240, h: 360 } },
+    standingSmoking7: { frame: { x: 1440, y: 720, w: 240, h: 360 } },
+    standingSmoking8: { frame: { x: 1680, y: 720, w: 240, h: 360 } },
+    standingSmoking9: { frame: { x: 1920, y: 720, w: 240, h: 360 } },
+    standingSmoking10: { frame: { x: 2160, y: 720, w: 240, h: 360 } },
+    standingSmoking11: { frame: { x: 2400, y: 720, w: 240, h: 360 } },
+    standingSmoking12: { frame: { x: 2640, y: 720, w: 240, h: 360 } },
   },
   animations: {
     idle: ["idle1", "idle2"],
@@ -30,13 +46,26 @@ const spritesheetData: SpritesheetData = {
       "walking5",
       "walking6",
     ],
-    sitting: [],
+    sitting: ["sitting1", "sitting2"],
     sitting_smoking: [],
-    standing_smoking: [],
+    standing_smoking: [
+      "standingSmoking1",
+      "standingSmoking2",
+      "standingSmoking3",
+      "standingSmoking4",
+      "standingSmoking5",
+      "standingSmoking6",
+      "standingSmoking7",
+      "standingSmoking8",
+      "standingSmoking9",
+      "standingSmoking10",
+      "standingSmoking11",
+      "standingSmoking12",
+    ],
   },
   meta: {
     image: "player-spritesheet.png",
-    size: { w: 1440, h: 720 },
+    size: { w: 2880, h: 1440 },
     scale: 1,
   },
 };
@@ -110,6 +139,9 @@ export class Player extends Container {
         break;
       case "walking":
         this.sprite.animationSpeed = 0.11;
+        break;
+      case "sitting":
+        this.sprite.animationSpeed = 0.05;
         break;
       default:
         this.sprite.animationSpeed = 0.1;

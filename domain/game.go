@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"log"
 	"time"
 
 	"github.com/akmatoff/thebench/errors"
@@ -41,7 +42,9 @@ func (g *Game) Sit(playerID string) error {
 		return errors.ErrPlayerNotFound
 	}
 	if player.Role == Sitter {
-		return errors.ErrAlreadySitting
+		g.Leave(playerID)
+
+		return nil
 	}
 
 	if !g.Bench.CanSit() {
@@ -57,12 +60,13 @@ func (g *Game) Sit(playerID string) error {
 	g.Bench.IsTaken = true
 
 	player.Role = Sitter
-	player.State = StateIdle
+	player.State = StateSitting
 
 	return nil
 }
 
 func (g *Game) Leave(playerID string) {
+	log.Printf("Player %s leaving bench", playerID)
 	for i, p := range g.Bench.Sitters {
 		if p != nil && p.ID == playerID {
 			g.Bench.Sitters[i] = nil
@@ -115,7 +119,7 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		g.RecordGesture(NewGesture(action, playerID))
 
 	case ActionMoveLeft:
-		if player.Role == Sitter || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
+		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
 			return nil
 		}
 
@@ -130,7 +134,8 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		}
 
 	case ActionMoveRight:
-		if player.Role == Sitter || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
+		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
+			log.Println("Cannot move right while sitting")
 			return nil
 		}
 
