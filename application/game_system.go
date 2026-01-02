@@ -94,6 +94,14 @@ func (gs *GameSystem) GetSnapshot() GameState {
 			Sitters:      sittersIDs,
 			WitnessCount: gs.Game.Bench.WitnessCount,
 			LastGesture:  lastGestureDTO,
+			SeatPositions: [2]BenchSeatPositionsDTO{
+				{
+					X: gs.Game.Bench.SeatPositions[0].X,
+				},
+				{
+					X: gs.Game.Bench.SeatPositions[1].X,
+				},
+			},
 		},
 	}
 }

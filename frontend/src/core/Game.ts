@@ -81,6 +81,24 @@ export class Game {
     this.playerSystem.setMovementDirection(direction);
   }
 
+  sitOnTheBench() {
+    const currentPlayer = this.playerSystem.getPlayer(this.playerId!);
+
+    if (!currentPlayer) return;
+
+    this.sendAction("sit");
+
+    const bench = this.state.snapshot?.bench;
+
+    if (bench?.sitters?.[0] == null) {
+      currentPlayer.position.x =
+        bench?.seatPositions[0].x || currentPlayer.position.x;
+    } else if (bench?.sitters?.[1] == null) {
+      currentPlayer.position.x =
+        bench?.seatPositions[1].x || currentPlayer.position.x;
+    }
+  }
+
   stopPlayerMovement() {
     this.playerSystem.stopMovement();
   }

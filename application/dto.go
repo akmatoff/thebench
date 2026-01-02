@@ -17,12 +17,18 @@ type PlayerPositionDTO struct {
 	X float64 `json:"x"`
 }
 
+type BenchSeatPositionsDTO struct {
+	X float64 `json:"x"`
+}
+
 type BenchDTO struct {
-	ID           string      `json:"id"`
-	IsTaken      bool        `json:"isTaken"`
-	Sitters      []string    `json:"sitters"`
-	WitnessCount int         `json:"witnessCount"`
-	LastGesture  *GestureDTO `json:"lastGesture,omitempty"`
+	ID            string                   `json:"id"`
+	IsTaken       bool                     `json:"isTaken"`
+	Sitters       []string                 `json:"sitters"`
+	WitnessCount  int                      `json:"witnessCount"`
+	LastGesture   *GestureDTO              `json:"lastGesture,omitempty"`
+	SeatPositions [2]BenchSeatPositionsDTO `json:"seatPositions"`
+	SeatRadius    float64                  `json:"seatRadius"`
 }
 
 type GestureDTO struct {

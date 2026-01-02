@@ -51,10 +51,18 @@ func (g *Game) Sit(playerID string) error {
 		return errors.ErrBenchFull
 	}
 
+	// check if player is near bench with calculation of distance
+	if player.Position.X > g.Bench.Position.X+g.Bench.SeatRadius ||
+		player.Position.X < g.Bench.Position.X-g.Bench.SeatRadius {
+		return errors.ErrPlayerTooFar
+	}
+
 	if g.Bench.Sitters[0] == nil {
 		g.Bench.Sitters[0] = player
+		player.Position.X = g.Bench.SeatPositions[0].X
 	} else {
 		g.Bench.Sitters[1] = player
+		player.Position.X = g.Bench.SeatPositions[1].X
 	}
 
 	g.Bench.IsTaken = true

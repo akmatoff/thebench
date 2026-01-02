@@ -6,6 +6,8 @@ export type Bench = {
   sitters: [Player | null, Player | null] | null;
   isTaken: boolean;
   lastGesture: Gesture | null;
+  seatPositions: [{ x: number }, { x: number }];
+  seatRadius: number;
 };
 
 export type LightingPhase = "day" | "night" | "dawn" | "dusk";

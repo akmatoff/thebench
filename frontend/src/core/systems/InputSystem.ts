@@ -87,8 +87,7 @@ export class InputSystem {
 
     switch (intent) {
       case Intent.Sit:
-        this.game.sendAction("sit");
-
+        this.game.sitOnTheBench();
         break;
       case Intent.Smoke:
         if (

@@ -22,10 +22,10 @@ func NewBench() *Bench {
 		LastGesture:  nil,
 		Position:     common.Position{X: WorldWidth / 2},
 		SeatPositions: [2]common.Position{
-			{X: WorldWidth/2 - 100},
-			{X: WorldWidth/2 + 100},
+			{X: WorldWidth/2 - 86},
+			{X: WorldWidth/2 + 86},
 		},
-		SeatRadius: 416,
+		SeatRadius: 210,
 	}
 }
 
