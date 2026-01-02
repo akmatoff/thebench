@@ -1,5 +1,6 @@
 {
   "name": "thebench",
+  "homepage": "akmatoff.github.io",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -7,7 +8,8 @@
     "start": "npm run dev",
     "build": "npm run lint && tsc && vite build",
     "lint": "eslint .",
-    "dev": "vite"
+    "dev": "vite",
+    "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
     "@pixi/layout": "^3.2.0",
@@ -22,6 +24,7 @@
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
+    "gh-pages": "^6.3.0",
     "prettier": "^3.5.3",
     "typescript": "~5.7.3",
     "typescript-eslint": "^8.25.0",
