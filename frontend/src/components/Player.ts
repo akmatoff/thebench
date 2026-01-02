@@ -135,13 +135,13 @@ export class Player extends Container {
 
     switch (state) {
       case "idle":
-        this.sprite.animationSpeed = 0.05;
+        this.sprite.animationSpeed = 0.03;
         break;
       case "walking":
         this.sprite.animationSpeed = 0.11;
         break;
       case "sitting":
-        this.sprite.animationSpeed = 0.05;
+        this.sprite.animationSpeed = 0.03;
         break;
       default:
         this.sprite.animationSpeed = 0.1;

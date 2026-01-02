@@ -75,9 +75,6 @@ func (g *Game) Sit(playerID string) error {
 
 func (g *Game) Leave(playerID string) {
 	log.Printf("Player %s leaving bench", playerID)
-	if playerID != g.Bench.Sitters[0].ID || playerID != g.Bench.Sitters[1].ID {
-		return
-	}
 
 	for i, p := range g.Bench.Sitters {
 		if p != nil && p.ID == playerID {

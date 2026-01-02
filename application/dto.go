@@ -6,29 +6,26 @@ type GameState struct {
 }
 
 type PlayerDTO struct {
-	ID       string            `json:"id"`
-	Role     string            `json:"role"`
-	State    string            `json:"state"`
-	Position PlayerPositionDTO `json:"position"`
-	Facing   string            `json:"facing"`
+	ID       string      `json:"id"`
+	Role     string      `json:"role"`
+	State    string      `json:"state"`
+	Position PositionDTO `json:"position"`
+	Facing   string      `json:"facing"`
 }
 
-type PlayerPositionDTO struct {
-	X float64 `json:"x"`
-}
-
-type BenchSeatPositionsDTO struct {
+type PositionDTO struct {
 	X float64 `json:"x"`
 }
 
 type BenchDTO struct {
-	ID            string                   `json:"id"`
-	IsTaken       bool                     `json:"isTaken"`
-	Sitters       []string                 `json:"sitters"`
-	WitnessCount  int                      `json:"witnessCount"`
-	LastGesture   *GestureDTO              `json:"lastGesture,omitempty"`
-	SeatPositions [2]BenchSeatPositionsDTO `json:"seatPositions"`
-	SeatRadius    float64                  `json:"seatRadius"`
+	ID            string         `json:"id"`
+	IsTaken       bool           `json:"isTaken"`
+	Sitters       []string       `json:"sitters"`
+	WitnessCount  int            `json:"witnessCount"`
+	LastGesture   *GestureDTO    `json:"lastGesture,omitempty"`
+	SeatPositions [2]PositionDTO `json:"seatPositions"`
+	SeatRadius    float64        `json:"seatRadius"`
+	Position      PositionDTO    `json:"position"`
 }
 
 type GestureDTO struct {

@@ -8,6 +8,7 @@ export type Bench = {
   lastGesture: Gesture | null;
   seatPositions: [{ x: number }, { x: number }];
   seatRadius: number;
+  position: { x: number };
 };
 
 export type LightingPhase = "day" | "night" | "dawn" | "dusk";

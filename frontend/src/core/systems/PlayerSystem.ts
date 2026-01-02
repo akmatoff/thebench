@@ -60,6 +60,10 @@ export class PlayerSystem {
       playerSprite.setAnimation(player.state);
       playerSprite.setFacing(player.facing);
 
+      if (player.role === "sitter") {
+        playerSprite.position.x = player.position.x;
+      }
+
       if (id !== this.game.playerId) {
         playerSprite.x = player.position.x;
       }

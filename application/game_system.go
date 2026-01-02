@@ -60,7 +60,7 @@ func (gs *GameSystem) GetSnapshot() GameState {
 			ID:    player.ID,
 			Role:  string(player.Role),
 			State: string(player.State),
-			Position: PlayerPositionDTO{
+			Position: PositionDTO{
 				X: player.Position.X,
 			},
 			Facing: string(player.Facing),
@@ -95,13 +95,17 @@ func (gs *GameSystem) GetSnapshot() GameState {
 			Sitters:      sittersIDs,
 			WitnessCount: gs.Game.Bench.WitnessCount,
 			LastGesture:  lastGestureDTO,
-			SeatPositions: [2]BenchSeatPositionsDTO{
+			SeatRadius:   gs.Game.Bench.SeatRadius,
+			SeatPositions: [2]PositionDTO{
 				{
 					X: gs.Game.Bench.SeatPositions[0].X,
 				},
 				{
 					X: gs.Game.Bench.SeatPositions[1].X,
 				},
+			},
+			Position: PositionDTO{
+				X: gs.Game.Bench.Position.X,
 			},
 		},
 	}

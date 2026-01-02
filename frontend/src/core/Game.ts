@@ -86,17 +86,21 @@ export class Game {
 
     if (!currentPlayer) return;
 
-    this.sendAction("sit");
-
     const bench = this.state.snapshot?.bench;
 
-    if (bench?.sitters?.[0] == null) {
-      currentPlayer.position.x =
-        bench?.seatPositions[0].x || currentPlayer.position.x;
-    } else if (bench?.sitters?.[1] == null) {
-      currentPlayer.position.x =
-        bench?.seatPositions[1].x || currentPlayer.position.x;
+    if (!bench) {
+      return;
     }
+
+    if (
+      currentPlayer.position.x > bench.position.x + bench.seatRadius ||
+      currentPlayer.position.x < bench.position.x - bench.seatRadius
+    ) {
+      console.log("too far from bench");
+      return;
+    }
+
+    this.sendAction("sit");
   }
 
   stopPlayerMovement() {
