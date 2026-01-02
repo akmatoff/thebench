@@ -1,4 +1,5 @@
 import { Container, Graphics, Ticker } from "pixi.js";
+import { WORLD_WIDTH } from "../core/Game";
 
 export class Star extends Graphics {
   constructor(x: number, y: number) {

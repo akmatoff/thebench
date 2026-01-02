@@ -7,12 +7,13 @@ export abstract class BaseScene {
 
   constructor(game: Game) {
     this.game = game;
-    this.game.app.stage.addChild(this.container);
   }
 
   abstract init(): Promise<void> | void;
 
   abstract update(delta: Ticker): void;
+
+  onResize?(): void;
 
   destroy(): void {
     this.container.destroy({ children: true });

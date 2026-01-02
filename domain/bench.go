@@ -20,10 +20,10 @@ func NewBench() *Bench {
 		IsTaken:      false,
 		Sitters:      [2]*Player{nil, nil},
 		LastGesture:  nil,
-		Position:     common.Position{X: WorldWidth / 2, Y: WorldHeight - 250},
+		Position:     common.Position{X: WorldWidth / 2},
 		SeatPositions: [2]common.Position{
-			{X: WorldWidth/2 - 100, Y: WorldHeight - 250},
-			{X: WorldWidth/2 + 100, Y: WorldHeight - 250},
+			{X: WorldWidth/2 - 100},
+			{X: WorldWidth/2 + 100},
 		},
 		SeatRadius: 416,
 	}

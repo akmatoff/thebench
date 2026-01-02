@@ -4,6 +4,10 @@ import { BaseScene } from "../core/BaseScene";
 import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
 import { Background } from "../components/Background";
+import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
+
+export const BENCH_Y_OFFSET = 140;
+export const STREET_LAMP_Y_OFFSET = 250;
 
 export class ParkScene extends BaseScene {
   private bench!: Bench;
@@ -22,15 +26,15 @@ export class ParkScene extends BaseScene {
     this.container.addChild(this.background);
 
     this.bench = new Bench();
-    this.bench.position.x = this.game.app.screen.width / 2;
-    this.bench.position.y =
-      this.game.app.screen.height - this.bench.height + 130;
+    this.bench.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT - BENCH_Y_OFFSET);
 
     this.container.addChild(this.bench);
 
     this.streetLamp = new StreetLamp();
-    this.streetLamp.position.x = this.bench.position.x - this.bench.width * 0.7;
-    this.streetLamp.position.y = this.bench.position.y - this.bench.height;
+    this.streetLamp.position.set(
+      this.bench.position.x - this.streetLamp.width * 3,
+      WORLD_HEIGHT - STREET_LAMP_Y_OFFSET
+    );
 
     this.container.addChild(this.streetLamp);
 
@@ -49,5 +53,15 @@ export class ParkScene extends BaseScene {
     this.streetLamp.update(ticker);
     this.sky.update(ticker);
     this.game.playerSystem.updateMovement(ticker.deltaTime);
+  }
+
+  onResize(): void {
+    const height = window.innerHeight;
+
+    this.bench.position.y = height - BENCH_Y_OFFSET;
+    this.streetLamp.position.y = height - STREET_LAMP_Y_OFFSET;
+
+    this.background.height = height;
+    this.sky.height = height;
   }
 }

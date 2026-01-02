@@ -1,9 +1,11 @@
 import { Container } from "pixi.js";
 import { GameState } from "../GameState";
-import { Game } from "../Game";
+import { Game, WORLD_HEIGHT } from "../Game";
 import { MovementDirection } from "../../types/player";
 import { GameStateSnapshot } from "../../types/messages";
 import { Player } from "../../components/Player";
+
+export const PLAYER_Y_OFFSET = 200;
 
 export class PlayerSystem {
   private sceneContainer: Container | null = null;
@@ -47,7 +49,8 @@ export class PlayerSystem {
         this.players.set(id, playerSprite);
         this.sceneContainer!.addChild(playerSprite);
 
-        playerSprite.position.y = this.game.app.screen.height - 200;
+        playerSprite.position.y =
+          WORLD_HEIGHT - playerSprite.height - PLAYER_Y_OFFSET;
 
         if (player.position) {
           playerSprite.x = player.position.x;
@@ -108,6 +111,12 @@ export class PlayerSystem {
     if (player) {
       player.destroy();
       this.players.delete(id);
+    }
+  }
+
+  onResize(): void {
+    for (const player of this.players.values()) {
+      player.position.y = window.innerHeight - PLAYER_Y_OFFSET;
     }
   }
 }

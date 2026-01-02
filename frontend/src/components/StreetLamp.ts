@@ -17,6 +17,9 @@ export class StreetLamp extends Container {
     this.addChild(this.base);
     this.addChild(this.bulb);
 
+    this.base.anchor.set(0.5);
+    this.bulb.anchor.set(0.5);
+
     this.bulb.tint = "#ffe18eff";
     this.base.tint = "#393e81ff";
 
@@ -26,7 +29,7 @@ export class StreetLamp extends Container {
     this.bulb.width = 64;
     this.bulb.height = 256;
 
-    this.scale.set(1.4);
+    this.scale.set(1.5);
 
     this.glowFilter = new GlowFilter({
       distance: 4,
