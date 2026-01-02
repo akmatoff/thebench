@@ -38,6 +38,7 @@ func (gs *GameSystem) RemovePlayer(id string) {
 	gs.mu.Lock()
 	defer gs.mu.Unlock()
 	gs.Game.RemovePlayer(id)
+	gs.Game.Leave(id)
 }
 
 func (gs *GameSystem) PerformAction(playerID string, action domain.Action) error {
