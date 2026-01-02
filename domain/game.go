@@ -13,7 +13,7 @@ type Game struct {
 
 const (
 	MOVEMENT_SPEED  = 1
-	WALKING_TIMEOUT = 200 * time.Millisecond
+	WALKING_TIMEOUT = 150 * time.Millisecond
 )
 
 func NewGame() *Game {
@@ -139,6 +139,10 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		player.Position.X += MOVEMENT_SPEED
 
 		player.LastMoveAt = time.Now()
+
+		if player.Position.X > WorldWidth {
+			player.Position.X = WorldWidth
+		}
 
 	default:
 		return errors.ErrUnknownAction

@@ -114,6 +114,14 @@ export class PlayerSystem {
     }
   }
 
+  getPlayer(id: string) {
+    const player = this.players.get(id);
+
+    if (!player) return;
+
+    return player;
+  }
+
   onResize(): void {
     for (const player of this.players.values()) {
       player.position.y = window.innerHeight - PLAYER_Y_OFFSET;

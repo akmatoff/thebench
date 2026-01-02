@@ -65,6 +65,8 @@ export class Game {
     if (this.state.snapshot) {
       this.playerSystem.onStateUpdate(this.state.snapshot);
     }
+
+    this.followPlayer();
   }
 
   sendAction(action: Action) {
@@ -81,6 +83,14 @@ export class Game {
 
   stopPlayerMovement() {
     this.playerSystem.stopMovement();
+  }
+
+  followPlayer(): void {
+    const player = this.playerSystem.getPlayer(this.playerId!);
+
+    if (!player) return;
+
+    this.viewport.moveCenter(player.x, this.viewport.center.y);
   }
 
   getCurrentPlayerState() {
