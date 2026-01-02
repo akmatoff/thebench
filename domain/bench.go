@@ -1,11 +1,16 @@
 package domain
 
+import "github.com/akmatoff/thebench/common"
+
 type Bench struct {
-	ID           string
-	WitnessCount int
-	Sitters      [2]*Player
-	IsTaken      bool
-	LastGesture  *Gesture
+	ID            string
+	WitnessCount  int
+	Sitters       [2]*Player
+	IsTaken       bool
+	LastGesture   *Gesture
+	Position      common.Position
+	SeatPositions [2]common.Position
+	SeatRadius    float64
 }
 
 func NewBench() *Bench {
@@ -15,6 +20,12 @@ func NewBench() *Bench {
 		IsTaken:      false,
 		Sitters:      [2]*Player{nil, nil},
 		LastGesture:  nil,
+		Position:     common.Position{X: WorldWidth / 2, Y: WorldHeight - 250},
+		SeatPositions: [2]common.Position{
+			{X: WorldWidth/2 - 100, Y: WorldHeight - 250},
+			{X: WorldWidth/2 + 100, Y: WorldHeight - 250},
+		},
+		SeatRadius: 416,
 	}
 }
 

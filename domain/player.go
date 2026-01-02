@@ -1,6 +1,10 @@
 package domain
 
-import "time"
+import (
+	"time"
+
+	"github.com/akmatoff/thebench/common"
+)
 
 type PlayerRole string
 
@@ -31,13 +35,9 @@ type Player struct {
 	Role       PlayerRole
 	JoinedAt   time.Time
 	State      PlayerState
-	Position   PlayerPosition
+	Position   common.Position
 	Facing     PlayerFacing
 	LastMoveAt time.Time
-}
-
-type PlayerPosition struct {
-	X float64
 }
 
 func NewPlayer(id string, role PlayerRole) *Player {
@@ -46,7 +46,7 @@ func NewPlayer(id string, role PlayerRole) *Player {
 		Role:       role,
 		JoinedAt:   time.Now(),
 		State:      StateIdle,
-		Position:   PlayerPosition{X: 10},
+		Position:   common.Position{X: 10, Y: WorldHeight - 250},
 		Facing:     FacingRight,
 		LastMoveAt: time.Now(),
 	}
