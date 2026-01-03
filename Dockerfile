@@ -1,4 +1,4 @@
-FROM golang:1.25.3-alpine
+FROM golang:1.25.3-alpine AS build
 
 WORKDIR /app
 
@@ -9,5 +9,11 @@ RUN go mod download
 COPY . . 
 
 RUN go build -o main .
+
+FROM alpine:latest
+
+WORKDIR /app
+
+COPY --from=build /app/main ./
 
 CMD ["./main"]

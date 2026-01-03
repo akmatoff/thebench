@@ -11,16 +11,6 @@ import (
 )
 
 func main() {
-	// distPath := "./frontend/dist"
-
-	// if _, err := os.Stat(distPath); err != nil {
-	// 	log.Fatalf("Frontend dist not found at %s. Run npm run build", distPath)
-	// }
-
-	// fileServer := http.FileServer(http.Dir(distPath))
-
-	// http.Handle("/", http.StripPrefix("/", fileServer))
-
 	gameSystem := application.NewGameSystem()
 	wsManager := infra.NewWebSocketManager()
 
