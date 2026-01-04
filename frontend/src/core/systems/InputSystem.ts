@@ -3,14 +3,11 @@ import { MovementDirection } from "../../types/player";
 import { BaseScene } from "../BaseScene";
 import { Game } from "../Game";
 
-const KEY_BINDINGS: Record<string, Intent> = {
-  s: Intent.Sit,
-  w: Intent.Wave,
-  p: Intent.Pat,
-  l: Intent.Leave,
-  x: Intent.Smoke,
-  arrowleft: Intent.MoveLeft,
-  arrowright: Intent.MoveRight,
+const KEY_BINDINGS: Record<KeyboardEvent["code"], Intent> = {
+  Space: Intent.Sit,
+  KeyX: Intent.Smoke,
+  ArrowLeft: Intent.MoveLeft,
+  ArrowRight: Intent.MoveRight,
 };
 
 export class InputSystem {
@@ -50,7 +47,9 @@ export class InputSystem {
   private handleKeyDown = (event: KeyboardEvent) => {
     if (!this.active || !this.game.state.snapshot) return;
 
-    const intent = KEY_BINDINGS[event.key.toLowerCase()];
+    console.log(event.code);
+
+    const intent = KEY_BINDINGS[event.code];
 
     if (!intent) {
       return;
@@ -64,7 +63,7 @@ export class InputSystem {
   };
 
   private handleKeyUp = (event: KeyboardEvent) => {
-    const intent = KEY_BINDINGS[event.key.toLowerCase()];
+    const intent = KEY_BINDINGS[event.code];
 
     if (!intent) {
       return;
