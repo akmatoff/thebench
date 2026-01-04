@@ -6,7 +6,7 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY . . 
+COPY . .
 
 RUN go build -o main .
 
@@ -15,5 +15,7 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=build /app/main ./
+
+EXPOSE 7000
 
 CMD ["./main"]
