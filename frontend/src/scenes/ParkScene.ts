@@ -44,12 +44,12 @@ export class ParkScene extends BaseScene {
         noise: 0.07,
       }),
       new AdjustmentFilter({
-        contrast: 0.98,
-        saturation: 0.9,
+        contrast: 0.85,
+        saturation: 0.8,
       }),
       new ColorOverlayFilter({
         color: "#636363",
-        alpha: 0.1,
+        alpha: 0.06,
       }),
     ];
 

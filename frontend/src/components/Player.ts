@@ -1,9 +1,7 @@
 import {
   AnimatedSprite,
   Assets,
-  BlurFilter,
   Container,
-  Graphics,
   Spritesheet,
   SpritesheetData,
   Texture,
@@ -155,7 +153,6 @@ export class Player extends Container {
 
     this.addChild(this.sprite);
     this.sprite.anchor.set(0.5);
-    this.sprite.filters = [];
 
     this.setAnimation("idle");
   }

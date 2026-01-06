@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/akmatoff/thebench/common"
@@ -47,7 +48,7 @@ func NewPlayer(id string, role PlayerRole) *Player {
 		Role:       role,
 		JoinedAt:   time.Now(),
 		State:      StateIdle,
-		Position:   common.Position{X: 60},
+		Position:   common.Position{X: 80 + rand.Float64()*600},
 		Facing:     FacingRight,
 		LastMoveAt: time.Now(),
 	}
