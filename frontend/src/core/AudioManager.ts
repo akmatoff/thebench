@@ -10,7 +10,7 @@ export class AudioManager {
     this.backgroundMusic = new Howl({
       src: bgAudio,
       loop: true,
-      volume: 0.1,
+      volume: 0.46,
     });
 
     setTimeout(() => {
@@ -24,7 +24,7 @@ export class AudioManager {
     });
 
     this.backgroundAmbience.play();
-    this.backgroundAmbience.fade(0, 0.3, 3000);
+    this.backgroundAmbience.fade(0, 0.6, 3000);
 
     this.addFilters();
   }

@@ -5,6 +5,11 @@ import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
 import { Background } from "../components/Background";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
+import {
+  AdjustmentFilter,
+  ColorOverlayFilter,
+  MotionBlurFilter,
+} from "pixi-filters";
 
 export const BENCH_Y_OFFSET = 140;
 export const STREET_LAMP_Y_OFFSET = 250;
@@ -40,7 +45,15 @@ export class ParkScene extends BaseScene {
 
     this.container.filters = [
       new NoiseFilter({
-        noise: 0.1,
+        noise: 0.07,
+      }),
+      new AdjustmentFilter({
+        contrast: 0.98,
+        saturation: 0.9,
+      }),
+      new ColorOverlayFilter({
+        color: "#636363",
+        alpha: 0.1,
       }),
     ];
 
