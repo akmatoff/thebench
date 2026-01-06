@@ -14,7 +14,7 @@ type Game struct {
 
 const (
 	MOVEMENT_SPEED  = 1
-	WALKING_TIMEOUT = 150 * time.Millisecond
+	WALKING_TIMEOUT = 100 * time.Millisecond
 )
 
 func NewGame() *Game {
@@ -67,8 +67,13 @@ func (g *Game) Sit(playerID string) error {
 
 	g.Bench.IsTaken = true
 
+	if player.State == StateStandingSmoking || player.State == StateWalkingSmoking {
+		player.State = StateSittingSmoking
+	} else {
+		player.State = StateSitting
+	}
+
 	player.Role = Sitter
-	player.State = StateSitting
 
 	return nil
 }
@@ -86,7 +91,12 @@ func (g *Game) Leave(playerID string) {
 
 	if p := g.Players[playerID]; p != nil {
 		p.Role = Witness
-		p.State = StateIdle
+
+		if p.State == StateSittingSmoking {
+			p.State = StateStandingSmoking
+		} else {
+			p.State = StateIdle
+		}
 	}
 }
 
@@ -128,11 +138,19 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		g.RecordGesture(NewGesture(action, playerID))
 
 	case ActionMoveLeft:
-		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
+		log.Printf("Player state while moving: %v", player.State)
+
+		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking {
 			return nil
 		}
 
-		player.State = StateWalking
+		switch player.State {
+		case StateStandingSmoking, StateWalkingSmoking:
+			player.State = StateWalkingSmoking
+		case StateIdle, StateWalking:
+			player.State = StateWalking
+		}
+
 		player.Facing = FacingLeft
 		player.Position.X -= MOVEMENT_SPEED
 
@@ -143,12 +161,20 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		}
 
 	case ActionMoveRight:
-		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking || player.State == StateStandingSmoking {
+		log.Printf("Player state while moving: %v", player.State)
+
+		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking {
 			log.Println("Cannot move right while sitting")
 			return nil
 		}
 
-		player.State = StateWalking
+		switch player.State {
+		case StateStandingSmoking, StateWalkingSmoking:
+			player.State = StateWalkingSmoking
+		case StateIdle, StateWalking:
+			player.State = StateWalking
+		}
+
 		player.Facing = FacingRight
 		player.Position.X += MOVEMENT_SPEED
 
@@ -185,11 +211,15 @@ func (g *Game) Update() {
 	now := time.Now()
 
 	for _, p := range g.Players {
-		if p.State == StateWalking {
-			if now.Sub(p.LastMoveAt) > WALKING_TIMEOUT {
+		if now.Sub(p.LastMoveAt) > WALKING_TIMEOUT {
+			switch p.State {
+			case StateStandingSmoking, StateWalkingSmoking:
+				p.State = StateStandingSmoking
+			case StateIdle, StateWalking:
 				p.State = StateIdle
 			}
 		}
+
 	}
 
 }

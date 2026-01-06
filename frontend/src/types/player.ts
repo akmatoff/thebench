@@ -13,7 +13,8 @@ export type PlayerState =
   | "standing_smoking"
   | "sitting_smoking"
   | "sitting"
-  | "walking";
+  | "walking"
+  | "walking_smoking";
 
 export type PlayerRole = "sitter" | "witness";
 export type PlayerPosition = {

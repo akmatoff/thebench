@@ -23,6 +23,7 @@ const (
 	StateSittingSmoking  PlayerState = "sitting_smoking"
 	StateStandingSmoking PlayerState = "standing_smoking"
 	StateWalking         PlayerState = "walking"
+	StateWalkingSmoking  PlayerState = "walking_smoking"
 )
 
 const (
