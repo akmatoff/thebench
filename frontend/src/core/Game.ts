@@ -6,7 +6,7 @@ import { GameSocket } from "./GameSocket";
 import { WS_URL } from "../config";
 import { Action } from "../types/game";
 import { InputSystem } from "./systems/InputSystem";
-import { MovementDirection } from "../types/player";
+import { MovementDirection, Player } from "../types/player";
 import { PlayerSystem } from "./systems/PlayerSystem";
 import { Viewport } from "pixi-viewport";
 
@@ -61,12 +61,17 @@ export class Game {
   private update(delta: Ticker) {
     this.currentScene?.update(delta);
     this.playerSystem.updateMovement(delta.deltaTime);
+    this.playerSystem.updateFootsteps();
 
     if (this.state.snapshot) {
       this.playerSystem.onStateUpdate(this.state.snapshot);
     }
 
     this.followPlayer();
+  }
+
+  public getPlayerState(id: string): Player | undefined {
+    return this.state.snapshot?.players[id];
   }
 
   sendAction(action: Action) {

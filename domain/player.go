@@ -47,7 +47,7 @@ func NewPlayer(id string, role PlayerRole) *Player {
 		Role:       role,
 		JoinedAt:   time.Now(),
 		State:      StateIdle,
-		Position:   common.Position{X: 10},
+		Position:   common.Position{X: 60},
 		Facing:     FacingRight,
 		LastMoveAt: time.Now(),
 	}

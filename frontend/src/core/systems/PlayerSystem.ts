@@ -17,6 +17,11 @@ export class PlayerSystem {
 
   private players: Map<string, Player> = new Map();
 
+  private lastFootstepFrame: Map<string, number> = new Map();
+  private FOOTSTEP_FRAMES = [1, 4];
+
+  private WALKING_STATES = new Set(["walking", "walking_smoking"]);
+
   constructor(game: Game) {
     this.gameState = game.state;
     this.game = game;
@@ -116,6 +121,35 @@ export class PlayerSystem {
     if (player.x + player.width / 2 < 0) player.x = 0 - player.width / 2;
     if (player.x > this.sceneContainer.width)
       player.x = this.sceneContainer.width - player.width / 2;
+  }
+
+  updateFootsteps(): void {
+    for (const [id, player] of this.players) {
+      const state = this.game.getPlayerState(id);
+
+      if (!state || !this.WALKING_STATES.has(state.state)) {
+        this.lastFootstepFrame.delete(id);
+        continue;
+      }
+
+      const currentFrame = player.currentAnimationFrame;
+      if (currentFrame < 0) continue;
+
+      if (
+        this.FOOTSTEP_FRAMES.includes(currentFrame) &&
+        this.lastFootstepFrame.get(id) !== currentFrame
+      ) {
+        this.game.audio.playFootstep();
+        this.lastFootstepFrame.set(id, currentFrame);
+      }
+
+      const localPlayer = this.players.get(this.game.playerId!);
+
+      // Skip sound if player is too far away
+      if (localPlayer && Math.abs(player.x - localPlayer.x) > 800) {
+        continue;
+      }
+    }
   }
 
   removePlayer(id: string): void {

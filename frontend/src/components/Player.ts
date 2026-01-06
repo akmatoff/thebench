@@ -127,6 +127,10 @@ export class Player extends Container {
     this.init();
   }
 
+  get currentAnimationFrame(): number {
+    return this.sprite.currentFrame;
+  }
+
   async init() {
     const texture = Assets.get("player");
 

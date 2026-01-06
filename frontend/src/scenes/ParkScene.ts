@@ -5,11 +5,7 @@ import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
 import { Background } from "../components/Background";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
-import {
-  AdjustmentFilter,
-  ColorOverlayFilter,
-  MotionBlurFilter,
-} from "pixi-filters";
+import { AdjustmentFilter, ColorOverlayFilter } from "pixi-filters";
 
 export const BENCH_Y_OFFSET = 140;
 export const STREET_LAMP_Y_OFFSET = 250;
