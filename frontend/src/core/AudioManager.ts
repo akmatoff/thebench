@@ -14,13 +14,8 @@ export class AudioManager {
   constructor() {
     this.backgroundMusic = new Howl({
       src: bgAudio,
-      loop: true,
       volume: 0.4,
     });
-
-    setTimeout(() => {
-      this.backgroundMusic.play();
-    }, 18000);
 
     this.backgroundAmbience = new Howl({
       src: bgAmbience,
@@ -37,7 +32,21 @@ export class AudioManager {
       new Howl({ src: footstep3 }),
     ];
 
+    this.playBackgroundMusic();
     this.addFilters();
+  }
+
+  private playBackgroundMusic() {
+    const playLooped = () => {
+      const delay = Math.random() * 30_000 + 30_000;
+
+      this.backgroundMusic.play();
+      this.backgroundMusic.once("end", () => {
+        setTimeout(playLooped, delay);
+      });
+    };
+
+    setTimeout(playLooped, 25_000);
   }
 
   public playFootstep() {
@@ -46,7 +55,7 @@ export class AudioManager {
     const randomIndex = Math.floor(Math.random() * this.footstepSounds.length);
     const footstepSound = this.footstepSounds[randomIndex];
 
-    footstepSound.volume(Math.random() * 0.3 + 0.05);
+    footstepSound.volume(Math.random() * 0.3 + 0.08);
     footstepSound.rate(0.6 + Math.random() * 0.2);
     footstepSound.play();
   }
