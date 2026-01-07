@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"encoding/json"
 	"log"
 
 	"github.com/akmatoff/thebench/application"
@@ -109,10 +108,6 @@ func (c *ClientHandler) handleAction(actionStr string) {
 }
 
 func (c *ClientHandler) sendPong() {
-	pong := struct {
-		Type string `json:"type"`
-	}{Type: "PONG"}
-
-	data, _ := json.Marshal(pong)
-	c.conn.WriteMessage(websocket.TextMessage, data)
+	pong := infra.NewOutgoingMessage(infra.PONG, nil)
+	c.wsManager.SendToClient(c.clientID, pong)
 }

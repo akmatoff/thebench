@@ -12,9 +12,10 @@ import (
 )
 
 type Client struct {
-	ID   string
-	Conn *websocket.Conn
-	Role domain.PlayerRole
+	ID       string
+	Conn     *websocket.Conn
+	Role     domain.PlayerRole
+	SendChan chan []byte
 }
 
 type WebSocketManager struct {
@@ -30,16 +31,28 @@ func NewWebSocketManager() *WebSocketManager {
 
 func NewClient(id string, conn *websocket.Conn, role domain.PlayerRole) *Client {
 	return &Client{
-		ID:   id,
-		Conn: conn,
-		Role: role,
+		ID:       id,
+		Conn:     conn,
+		Role:     role,
+		SendChan: make(chan []byte, 256),
 	}
 }
 
 func (wm *WebSocketManager) AddClient(id string, client *Client) {
 	wm.mu.Lock()
-	defer wm.mu.Unlock()
 	wm.clients[id] = client
+	defer wm.mu.Unlock()
+
+	go func() {
+		defer client.Conn.Close()
+		for msg := range client.SendChan {
+			err := client.Conn.WriteMessage(websocket.TextMessage, msg)
+			if err != nil {
+				log.Printf("write error to %s: %v", id, err)
+				return
+			}
+		}
+	}()
 }
 
 func (wm *WebSocketManager) RemoveClient(id string) {
@@ -62,13 +75,21 @@ func (wm *WebSocketManager) Broadcast(message OutgoingMessage) {
 	}
 
 	for _, client := range wm.clients {
-		if err := client.Conn.WriteMessage(websocket.TextMessage, data); err != nil {
-			log.Printf("broadcast to %s failed: %v", client.ID, err)
+		select {
+		case client.SendChan <- data:
+		default:
+			log.Printf("send to %s failed: channel full", client.ID)
 		}
 	}
 }
 
 func (wm *WebSocketManager) SendToClient(clientID string, msg OutgoingMessage) {
+	data, err := json.Marshal(msg)
+	if err != nil {
+		log.Printf("send to %s failed: %v", clientID, err)
+		return
+	}
+
 	wm.mu.RLock()
 	defer wm.mu.RUnlock()
 
@@ -77,8 +98,11 @@ func (wm *WebSocketManager) SendToClient(clientID string, msg OutgoingMessage) {
 		return
 	}
 
-	data, _ := json.Marshal(msg)
-	client.Conn.WriteMessage(websocket.TextMessage, data)
+	select {
+	case client.SendChan <- data:
+	default:
+		log.Printf("send to %s failed: channel full", client.ID)
+	}
 }
 
 func (wm *WebSocketManager) StartBroadcastLoop(gameSystem *application.GameSystem, interval time.Duration) {
