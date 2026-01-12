@@ -47,15 +47,13 @@ export class InputSystem {
   private handleKeyDown = (event: KeyboardEvent) => {
     if (!this.active || !this.game.state.snapshot) return;
 
-    console.log(event.code);
-
     const intent = KEY_BINDINGS[event.code];
 
     if (!intent) {
       return;
     }
 
-    if (event.key === " " || event.key === "s" || event.key === "x") {
+    if (event.code === "KeyX" || event.code === "Space") {
       event.preventDefault();
     }
 
