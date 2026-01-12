@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 export default function useControlHintOpen() {
   const [isOpen, setIsOpen] = useState(() => {
@@ -6,21 +6,24 @@ export default function useControlHintOpen() {
     return storedValue === null ? true : JSON.parse(storedValue);
   });
 
+  const isOpenRef = useRef(isOpen);
+  isOpenRef.current = isOpen;
+
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Escape" && isOpenRef.current) {
+        closeHint();
+      } else if (event.code === "Backquote" && !isOpenRef.current) {
+        openHint();
+      }
+    };
+
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.code === "Escape" && isOpen) {
-      closeHint();
-    } else if (event.code === "Backquote") {
-      openHint();
-    }
-  };
 
   const openHint = () => {
     setIsOpen(true);
