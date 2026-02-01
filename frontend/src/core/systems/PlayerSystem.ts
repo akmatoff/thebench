@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { GameState } from "../GameState";
-import { Game, WORLD_HEIGHT } from "../Game";
+import { Game, WORLD_HEIGHT, WORLD_WIDTH } from "../Game";
 import { MovementDirection } from "../../types/player";
 import { GameStateSnapshot } from "../../types/messages";
 import { Player } from "../../components/Player";
@@ -62,6 +62,8 @@ export class PlayerSystem {
         }
       }
 
+      this.handlePositionLimits(playerSprite, id);
+
       playerSprite.setAnimation(player.state);
       playerSprite.setFacing(player.facing);
 
@@ -72,6 +74,20 @@ export class PlayerSystem {
       if (id !== this.game.playerId) {
         playerSprite.x = player.position.x;
       }
+    }
+  }
+
+  handlePositionLimits(playerSprite: Player, playerId: string) {
+    const player = this.players.get(playerId);
+
+    if (!player) return;
+
+    const { x } = player.position;
+
+    if (x < 0) {
+      playerSprite.x = 0;
+    } else if (x > WORLD_WIDTH) {
+      playerSprite.x = WORLD_WIDTH;
     }
   }
 
