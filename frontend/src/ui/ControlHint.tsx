@@ -42,6 +42,9 @@ export default function ControlHint() {
               Use <kbd>x</kbd> to smoke.
             </p>
             <p>
+              Use <kbd>v</kbd> to take a drag.
+            </p>
+            <p>
               Use <kbd>Space</kbd> near the bench to sit.
             </p>
           </div>
