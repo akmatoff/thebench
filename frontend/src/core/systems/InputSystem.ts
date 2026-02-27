@@ -6,6 +6,7 @@ import { Game } from "../Game";
 const KEY_BINDINGS: Record<KeyboardEvent["code"], Intent> = {
   Space: Intent.Sit,
   KeyX: Intent.Smoke,
+  KeyV: Intent.TakeDrag,
   ArrowLeft: Intent.MoveLeft,
   ArrowRight: Intent.MoveRight,
 };
@@ -81,6 +82,9 @@ export class InputSystem {
 
   private handleIntent(intent: Intent) {
     const currentPlayer = this.game.getCurrentPlayerState();
+    const canTakeDrag = this.game.canPlayerTakeDrag();
+
+    const playerSprite = this.game.playerSystem.getPlayer(this.game.playerId!);
 
     switch (intent) {
       case Intent.Sit:
@@ -94,6 +98,13 @@ export class InputSystem {
           this.game.sendAction("stop_smoking");
         } else {
           this.game.sendAction("smoke");
+        }
+
+        break;
+      case Intent.TakeDrag:
+        if (canTakeDrag) {
+          playerSprite?.takeDrag();
+          this.game.sendAction("take_drag");
         }
 
         break;

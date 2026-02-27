@@ -14,7 +14,8 @@ export type Action =
   | "wave"
   | "pat"
   | "move_left"
-  | "move_right";
+  | "move_right"
+  | "take_drag";
 
 export enum Intent {
   Smoke = "smoke",
@@ -24,4 +25,5 @@ export enum Intent {
   Pat = "pat",
   MoveLeft = "move_left",
   MoveRight = "move_right",
+  TakeDrag = "take_drag",
 }

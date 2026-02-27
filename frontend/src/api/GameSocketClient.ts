@@ -78,7 +78,6 @@ export class GameSocketClient {
   }
 
   send(message: GameOutgoingMessage) {
-    console.log("Sending message: ", message);
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message));
     } else {

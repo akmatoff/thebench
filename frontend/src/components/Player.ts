@@ -55,6 +55,46 @@ const spritesheetData: SpritesheetData = {
     walkingSmoking4: { frame: { x: 720, y: 1800, w: 240, h: 360 } },
     walkingSmoking5: { frame: { x: 960, y: 1800, w: 240, h: 360 } },
     walkingSmoking6: { frame: { x: 1200, y: 1800, w: 240, h: 360 } },
+
+    standingDragging1: { frame: { x: 0, y: 2160, w: 240, h: 360 } },
+    standingDragging2: { frame: { x: 240, y: 2160, w: 240, h: 360 } },
+    standingDragging3: { frame: { x: 480, y: 2160, w: 240, h: 360 } },
+    standingDragging4: { frame: { x: 720, y: 2160, w: 240, h: 360 } },
+    standingDragging5: { frame: { x: 960, y: 2160, w: 240, h: 360 } },
+    standingDragging6: { frame: { x: 1200, y: 2160, w: 240, h: 360 } },
+    standingDragging7: { frame: { x: 1440, y: 2160, w: 240, h: 360 } },
+    standingDragging8: { frame: { x: 1680, y: 2160, w: 240, h: 360 } },
+    standingDragging9: { frame: { x: 1920, y: 2160, w: 240, h: 360 } },
+    standingDragging10: { frame: { x: 2160, y: 2160, w: 240, h: 360 } },
+    standingDragging11: { frame: { x: 2400, y: 2160, w: 240, h: 360 } },
+    standingDragging12: { frame: { x: 2640, y: 2160, w: 240, h: 360 } },
+    standingDragging13: { frame: { x: 2880, y: 2160, w: 240, h: 360 } },
+    standingDragging14: { frame: { x: 3120, y: 2160, w: 240, h: 360 } },
+    standingDragging15: { frame: { x: 3360, y: 2160, w: 240, h: 360 } },
+    standingDragging16: { frame: { x: 3600, y: 2160, w: 240, h: 360 } },
+    standingDragging17: { frame: { x: 3840, y: 2160, w: 240, h: 360 } },
+    standingDragging18: { frame: { x: 4080, y: 2160, w: 240, h: 360 } },
+
+    sittingDragging1: { frame: { x: 0, y: 2520, w: 240, h: 360 } },
+    sittingDragging2: { frame: { x: 240, y: 2520, w: 240, h: 360 } },
+    sittingDragging3: { frame: { x: 480, y: 2520, w: 240, h: 360 } },
+    sittingDragging4: { frame: { x: 720, y: 2520, w: 240, h: 360 } },
+    sittingDragging5: { frame: { x: 960, y: 2520, w: 240, h: 360 } },
+    sittingDragging6: { frame: { x: 1200, y: 2520, w: 240, h: 360 } },
+    sittingDragging7: { frame: { x: 1440, y: 2520, w: 240, h: 360 } },
+    sittingDragging8: { frame: { x: 1680, y: 2520, w: 240, h: 360 } },
+    sittingDragging9: { frame: { x: 1920, y: 2520, w: 240, h: 360 } },
+    sittingDragging10: { frame: { x: 2160, y: 2520, w: 240, h: 360 } },
+    sittingDragging11: { frame: { x: 2400, y: 2520, w: 240, h: 360 } },
+    sittingDragging12: { frame: { x: 2640, y: 2520, w: 240, h: 360 } },
+    sittingDragging13: { frame: { x: 2880, y: 2520, w: 240, h: 360 } },
+    sittingDragging14: { frame: { x: 3120, y: 2520, w: 240, h: 360 } },
+    sittingDragging15: { frame: { x: 3360, y: 2520, w: 240, h: 360 } },
+    sittingDragging16: { frame: { x: 3600, y: 2520, w: 240, h: 360 } },
+    sittingDragging17: { frame: { x: 3840, y: 2520, w: 240, h: 360 } },
+    sittingDragging18: { frame: { x: 4080, y: 2520, w: 240, h: 360 } },
+    sittingDragging19: { frame: { x: 4320, y: 2520, w: 240, h: 360 } },
+    sittingDragging20: { frame: { x: 4560, y: 2520, w: 240, h: 360 } },
   },
   animations: {
     idle: ["idle1", "idle2"],
@@ -103,10 +143,50 @@ const spritesheetData: SpritesheetData = {
       "standingSmoking11",
       "standingSmoking12",
     ],
+    standing_dragging: [
+      "standingDragging1",
+      "standingDragging2",
+      "standingDragging3",
+      "standingDragging4",
+      "standingDragging5",
+      "standingDragging6",
+      "standingDragging7",
+      "standingDragging8",
+      "standingDragging9",
+      "standingDragging10",
+      "standingDragging11",
+      "standingDragging12",
+      "standingDragging13",
+      "standingDragging14",
+      "standingDragging15",
+      "standingDragging16",
+      "standingDragging17",
+      "standingDragging18",
+    ],
+    sitting_dragging: [
+      "sittingDragging1",
+      "sittingDragging2",
+      "sittingDragging3",
+      "sittingDragging4",
+      "sittingDragging5",
+      "sittingDragging6",
+      "sittingDragging7",
+      "sittingDragging8",
+      "sittingDragging9",
+      "sittingDragging10",
+      "sittingDragging11",
+      "sittingDragging12",
+      "sittingDragging13",
+      "sittingDragging14",
+      "sittingDragging15",
+      "sittingDragging16",
+      "sittingDragging17",
+      "sittingDragging18",
+    ],
   },
   meta: {
     image: "player-spritesheet.png",
-    size: { w: 2880, h: 1440 },
+    size: { w: 4800, h: 2880 },
     scale: 1,
   },
 };
@@ -118,6 +198,11 @@ export class Player extends Container {
   private animationTextures: Record<string, Texture[]> = {};
 
   facing: PlayerFacing = "right";
+
+  isTakingDrag = false;
+  isDragCooldown = false;
+
+  private readonly DRAG_COOLDOWN_MS = 500;
 
   constructor() {
     super();
@@ -207,6 +292,85 @@ export class Player extends Container {
 
   walk() {
     this.setAnimation("walking");
+  }
+
+  canTakeDrag(): boolean {
+    if (this.isTakingDrag || this.isDragCooldown) {
+      return false;
+    }
+
+    const isSittingSmoking = this.currentAnimation === "sitting_smoking";
+    const isStandingSmoking = this.currentAnimation === "standing_smoking";
+    const isWalkingSmoking = this.currentAnimation === "walking_smoking";
+
+    return isSittingSmoking || isStandingSmoking || isWalkingSmoking;
+  }
+
+  takeDrag(): boolean {
+    if (!this.canTakeDrag()) {
+      return false;
+    }
+
+    const isSittingSmoking = this.currentAnimation === "sitting_smoking";
+
+    const dragState = isSittingSmoking
+      ? "sitting_dragging"
+      : "standing_dragging";
+
+    const textures = this.animationTextures[dragState];
+    if (!textures?.length) {
+      console.warn("No drag textures for state:", dragState);
+      return false;
+    }
+
+    this.isTakingDrag = true;
+
+    this.sprite.textures = textures;
+    this.sprite.loop = false;
+    this.sprite.animationSpeed = 0.1;
+    this.sprite.gotoAndPlay(0);
+
+    this.sprite.onComplete = () => {
+      this.onDragComplete();
+    };
+
+    this.isDragCooldown = true;
+
+    setTimeout(() => {
+      this.isDragCooldown = false;
+    }, this.DRAG_COOLDOWN_MS);
+
+    return true;
+  }
+
+  private onDragComplete() {
+    this.isTakingDrag = false;
+    this.sprite.onComplete = undefined;
+
+    this.sprite.loop = true;
+
+    const textures = this.animationTextures[this.currentAnimation];
+    if (textures?.length) {
+      this.sprite.textures = textures;
+      this.sprite.loop = true;
+
+      switch (this.currentAnimation) {
+        case "idle":
+        case "sitting":
+          this.sprite.animationSpeed = 0.03;
+          break;
+        case "walking":
+          this.sprite.animationSpeed = 0.11;
+          break;
+        default:
+          this.sprite.animationSpeed = 0.1;
+      }
+
+      this.sprite.gotoAndPlay(0);
+
+      console.log("Drag complete");
+      console.log(this.currentAnimation);
+    }
   }
 
   update() {

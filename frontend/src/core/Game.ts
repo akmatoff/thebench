@@ -134,6 +134,22 @@ export class Game {
     this.playerSystem.onResize();
   };
 
+  takeDrag() {
+    const player = this.playerSystem.getPlayer(this.playerId!);
+
+    if (!player) return;
+
+    return player.takeDrag();
+  }
+
+  canPlayerTakeDrag() {
+    const player = this.playerSystem.getPlayer(this.playerId!);
+
+    if (!player) return false;
+
+    return player.canTakeDrag();
+  }
+
   destroy(): void {
     window.removeEventListener("resize", this.onResize);
     this.app.ticker.remove(this.update, this);

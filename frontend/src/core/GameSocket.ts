@@ -30,7 +30,6 @@ export class GameSocket {
   }
 
   sendAction(action: Action): void {
-    console.log("Sending action: ", action);
     this.gameState.enqueueAction(action);
     this.client.send({ type: "ACTION", payload: { action } });
   }
