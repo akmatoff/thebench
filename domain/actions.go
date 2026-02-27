@@ -11,4 +11,5 @@ const (
 	ActionPat         Action = "pat"
 	ActionMoveLeft    Action = "move_left"
 	ActionMoveRight   Action = "move_right"
+	ActionTakeDrag    Action = "take_drag"
 )

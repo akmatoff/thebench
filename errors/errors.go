@@ -9,6 +9,7 @@ var ErrPlayerNotFound = errors.New("player not found")
 var ErrInvalidGesture = errors.New("invalid gesture")
 var ErrUnknownAction = errors.New("unknown action")
 var ErrNotSitter = errors.New("not a sitter")
+var ErrNotSmoking = errors.New("not smoking")
 
 var ErrFailedToParse = errors.New("failed to parse")
 var ErrUnknownMessageType = errors.New("unknown message type")

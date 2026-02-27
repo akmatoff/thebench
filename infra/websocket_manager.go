@@ -118,3 +118,16 @@ func (wm *WebSocketManager) StartBroadcastLoop(gameSystem *application.GameSyste
 		}
 	}()
 }
+
+func (wm *WebSocketManager) BroadcastGesture(gesture *domain.Gesture) {
+	gestureDto := application.GestureDTO{
+		Type:        string(gesture.Type),
+		AuthorID:    gesture.AuthorID,
+		PerformedAt: gesture.PerformedAt.Format(time.RFC3339),
+	}
+
+	log.Printf("Broadcasting gesture: %+v", gestureDto)
+
+	msg := NewOutgoingMessage(GESTURE, gestureDto)
+	wm.Broadcast(msg)
+}

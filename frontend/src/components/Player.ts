@@ -367,9 +367,6 @@ export class Player extends Container {
       }
 
       this.sprite.gotoAndPlay(0);
-
-      console.log("Drag complete");
-      console.log(this.currentAnimation);
     }
   }
 

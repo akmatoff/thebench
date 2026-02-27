@@ -29,6 +29,7 @@ const (
 	ACTION    MessageType = "ACTION"
 	CONNECTED MessageType = "CONNECTED"
 	STATE     MessageType = "STATE"
+	GESTURE   MessageType = "GESTURE"
 )
 
 func NewOutgoingMessage(t MessageType, p interface{}) OutgoingMessage {

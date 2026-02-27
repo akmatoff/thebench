@@ -89,6 +89,7 @@ func (c *ClientHandler) handleAction(actionStr string) {
 		domain.ActionPat:         true,
 		domain.ActionMoveLeft:    true,
 		domain.ActionMoveRight:   true,
+		domain.ActionTakeDrag:    true,
 	}
 
 	if !validActions[action] {
@@ -96,9 +97,15 @@ func (c *ClientHandler) handleAction(actionStr string) {
 		return
 	}
 
-	if err := c.gameSystem.PerformAction(c.clientID, action); err != nil {
+	gesture, err := c.gameSystem.PerformAction(c.clientID, action)
+
+	if err != nil {
 		log.Printf("Action failed for client %s: %v", c.clientID, err)
 		return
+	}
+
+	if gesture != nil {
+		c.wsManager.BroadcastGesture(gesture)
 	}
 
 	for _, p := range c.gameSystem.GetSnapshot().Players {

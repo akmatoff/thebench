@@ -40,6 +40,7 @@ type Player struct {
 	Position   common.Position
 	Facing     PlayerFacing
 	LastMoveAt time.Time
+	LastDragAt time.Time
 }
 
 func NewPlayer(id string, role PlayerRole) *Player {

@@ -41,12 +41,14 @@ func (gs *GameSystem) RemovePlayer(id string) {
 	gs.Game.Leave(id)
 }
 
-func (gs *GameSystem) PerformAction(playerID string, action domain.Action) error {
+func (gs *GameSystem) PerformAction(playerID string, action domain.Action) (*domain.Gesture, error) {
 	gs.mu.Lock()
 	defer gs.mu.Unlock()
 
 	log.Printf("Player %s performing action %s", playerID, action)
+
 	return gs.Game.PerformAction(playerID, action)
+
 }
 
 func (gs *GameSystem) GetSnapshot() GameState {

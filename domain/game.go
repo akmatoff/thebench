@@ -100,11 +100,13 @@ func (g *Game) Leave(playerID string) {
 	}
 }
 
-func (g *Game) PerformAction(playerID string, action Action) error {
+func (g *Game) PerformAction(playerID string, action Action) (*Gesture, error) {
 	player := g.Players[playerID]
 
+	dragCooldown := 500 * time.Millisecond
+
 	if player == nil {
-		return errors.ErrPlayerNotFound
+		return nil, errors.ErrPlayerNotFound
 	}
 
 	switch action {
@@ -125,15 +127,27 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 			player.State = StateIdle
 		}
 
+	case ActionTakeDrag:
+		if player.State != StateSittingSmoking && player.State != StateStandingSmoking {
+			return nil, errors.ErrNotSmoking
+		}
+
+		if time.Since(player.LastDragAt) < dragCooldown {
+			return nil, nil
+		}
+
+		player.LastDragAt = time.Now()
+		return g.RecordGesture(NewGesture(ActionTakeDrag, playerID)), nil
+
 	case ActionSit:
-		return g.Sit(playerID)
+		g.Sit(playerID)
 
 	case ActionLeave:
 		g.Leave(playerID)
 
 	case ActionWave, ActionPat:
 		if player.Role != Sitter {
-			return errors.ErrNotSitter
+			return nil, errors.ErrNotSitter
 		}
 		g.RecordGesture(NewGesture(action, playerID))
 
@@ -141,7 +155,7 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		log.Printf("Player state while moving: %v", player.State)
 
 		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking {
-			return nil
+			return nil, nil
 		}
 
 		switch player.State {
@@ -165,7 +179,7 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 
 		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking {
 			log.Println("Cannot move right while sitting")
-			return nil
+			return nil, nil
 		}
 
 		switch player.State {
@@ -185,14 +199,16 @@ func (g *Game) PerformAction(playerID string, action Action) error {
 		}
 
 	default:
-		return errors.ErrUnknownAction
+		return nil, errors.ErrUnknownAction
 	}
 
-	return nil
+	return nil, nil
 }
 
-func (g *Game) RecordGesture(gesture *Gesture) {
+func (g *Game) RecordGesture(gesture *Gesture) *Gesture {
 	g.Bench.LastGesture = gesture
+
+	return gesture
 }
 
 func (g *Game) UpdateWitnessCount() {
