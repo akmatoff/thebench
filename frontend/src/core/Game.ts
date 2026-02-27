@@ -21,7 +21,7 @@ export class Game {
   public readonly state: GameState;
   public playerId: string | null = null;
 
-  private socket: GameSocket;
+  public readonly socket: GameSocket;
 
   public readonly input: InputSystem;
   public readonly playerSystem: PlayerSystem;

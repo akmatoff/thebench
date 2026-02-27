@@ -2,7 +2,7 @@ import { Container } from "pixi.js";
 import { GameState } from "../GameState";
 import { Game, WORLD_HEIGHT, WORLD_WIDTH } from "../Game";
 import { MovementDirection } from "../../types/player";
-import { GameStateSnapshot } from "../../types/messages";
+import { GameStateSnapshot, GesturePayload } from "../../types/messages";
 import { Player } from "../../components/Player";
 
 export const PLAYER_Y_OFFSET = 220;
@@ -27,6 +27,23 @@ export class PlayerSystem {
     this.game = game;
 
     this.gameState.setOnUpdate(this.onStateUpdate.bind(this));
+    this.game.socket.onGesture = this.onGesture.bind(this);
+  }
+
+  private onGesture(gesture: GesturePayload): void {
+    if (gesture.authorId === this.game.playerId) {
+      return;
+    }
+
+    const player = this.players.get(gesture.authorId);
+
+    if (!player) return;
+
+    switch (gesture.type) {
+      case "take_drag":
+        player.takeDrag();
+        break;
+    }
   }
 
   onStateUpdate(snapshot: GameStateSnapshot): void {

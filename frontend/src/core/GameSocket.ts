@@ -1,6 +1,6 @@
 import { GameSocketClient } from "../api/GameSocketClient";
 import { GameState } from "./GameState";
-import { GameIncomingMessage, GameStateSnapshot } from "../types/messages";
+import { GameIncomingMessage, GesturePayload } from "../types/messages";
 import { Action } from "../types/game";
 
 export class GameSocket {
@@ -8,6 +8,7 @@ export class GameSocket {
   private gameState: GameState;
 
   onConnected: ((playerId: string) => void) | null = null;
+  onGesture: ((gesture: GesturePayload) => void) | null = null;
 
   constructor(gameState: GameState, url: string) {
     this.gameState = gameState;
@@ -25,6 +26,10 @@ export class GameSocket {
 
       case "STATE":
         this.gameState.applyServerUpdate(message.payload);
+        return;
+
+      case "GESTURE":
+        this.onGesture?.(message.payload);
         return;
     }
   }

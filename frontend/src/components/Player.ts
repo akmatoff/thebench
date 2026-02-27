@@ -160,8 +160,6 @@ const spritesheetData: SpritesheetData = {
       "standingDragging14",
       "standingDragging15",
       "standingDragging16",
-      "standingDragging17",
-      "standingDragging18",
     ],
     sitting_dragging: [
       "sittingDragging1",
@@ -180,8 +178,6 @@ const spritesheetData: SpritesheetData = {
       "sittingDragging14",
       "sittingDragging15",
       "sittingDragging16",
-      "sittingDragging17",
-      "sittingDragging18",
     ],
   },
   meta: {

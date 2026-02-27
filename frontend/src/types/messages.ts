@@ -17,6 +17,12 @@ export type GameStateSnapshot = {
   bench: Bench;
 };
 
+export type GesturePayload = {
+  type: "take_drag" | "wave" | "pat";
+  authorId: string;
+  performedAt: string;
+};
+
 export type GameOutgoingMessage =
   | { type: "PING" }
   | { type: "ACTION"; payload: ActionPayload };
@@ -24,4 +30,5 @@ export type GameOutgoingMessage =
 export type GameIncomingMessage =
   | { type: "PONG"; payload?: null }
   | { type: "CONNECTED"; payload: ConnectedPayload }
-  | { type: "STATE"; payload: GameStateSnapshot };
+  | { type: "STATE"; payload: GameStateSnapshot }
+  | { type: "GESTURE"; payload: GesturePayload };
