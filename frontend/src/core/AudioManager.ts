@@ -14,7 +14,7 @@ export class AudioManager {
   constructor() {
     this.backgroundMusic = new Howl({
       src: bgAudio,
-      volume: 0.4,
+      volume: 0.3,
     });
 
     this.backgroundAmbience = new Howl({
@@ -55,7 +55,7 @@ export class AudioManager {
     const randomIndex = Math.floor(Math.random() * this.footstepSounds.length);
     const footstepSound = this.footstepSounds[randomIndex];
 
-    footstepSound.volume(Math.random() * 0.3 + 0.08);
+    footstepSound.volume(Math.random() * 0.3 + 0.1);
     footstepSound.rate(0.6 + Math.random() * 0.2);
     footstepSound.play();
   }

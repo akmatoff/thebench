@@ -39,19 +39,21 @@ export class ParkScene extends BaseScene {
 
     this.container.addChild(this.streetLamp);
 
-    this.container.filters = [
+    const NIGHT_FILTERS = [
       new NoiseFilter({
-        noise: 0.07,
+        noise: 0.06,
       }),
       new AdjustmentFilter({
-        contrast: 0.85,
-        saturation: 0.8,
+        contrast: 1.3,
+        saturation: 0.5,
       }),
       new ColorOverlayFilter({
-        color: "#636363",
-        alpha: 0.06,
+        color: "#082752",
+        alpha: 0.6,
       }),
     ];
+
+    this.container.filters = NIGHT_FILTERS;
 
     this.game.playerSystem.setSceneContainer(this.container);
 
