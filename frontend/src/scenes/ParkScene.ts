@@ -5,7 +5,9 @@ import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
 import { Background } from "../components/Background";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
-import { AdjustmentFilter, ColorOverlayFilter } from "pixi-filters";
+import { LanternLight, LightSource, LightSystem } from "../lights";
+import { NightOverlay } from "../components/NightOverlay";
+import { AdjustmentFilter } from "pixi-filters";
 
 export const BENCH_Y_OFFSET = 140;
 export const STREET_LAMP_Y_OFFSET = 250;
@@ -16,8 +18,14 @@ export class ParkScene extends BaseScene {
 
   private streetLamp!: StreetLamp;
   private sky!: Sky;
+  private lightSystem!: LightSystem;
+
+  private lanternLight!: LanternLight;
+  private nightOverlay!: NightOverlay;
 
   async init() {
+    this.container.sortableChildren = true;
+
     this.sky = new Sky(this.game.app.screen.width, this.game.app.screen.height);
 
     this.container.addChild(this.sky);
@@ -39,30 +47,38 @@ export class ParkScene extends BaseScene {
 
     this.container.addChild(this.streetLamp);
 
-    const NIGHT_FILTERS = [
-      new NoiseFilter({
-        noise: 0.06,
-      }),
+    this.container.filters = [
       new AdjustmentFilter({
-        contrast: 1.3,
-        saturation: 0.5,
+        contrast: 1.6,
+        saturation: 1.1,
+        brightness: 0.9,
       }),
-      new ColorOverlayFilter({
-        color: "#082752",
-        alpha: 0.6,
+      new NoiseFilter({
+        noise: 0.03,
       }),
     ];
 
-    this.container.filters = NIGHT_FILTERS;
+    this.nightOverlay = new NightOverlay();
+    this.container.addChild(this.nightOverlay);
+
+    this.lightSystem = new LightSystem(this.container);
+    this.initLights();
 
     this.game.playerSystem.setSceneContainer(this.container);
 
     this.game.input.activate(this);
   }
 
+  private initLights(): void {
+    this.lanternLight = new LanternLight();
+    this.lanternLight.setPosition(this.streetLamp.x, this.streetLamp.y + 80);
+    this.lightSystem.addLight(this.lanternLight);
+  }
+
   update(ticker: Ticker) {
     this.streetLamp.update(ticker);
     this.sky.update(ticker);
+    this.lightSystem.update(ticker);
     this.game.playerSystem.updateMovement(ticker.deltaTime);
   }
 
@@ -74,5 +90,7 @@ export class ParkScene extends BaseScene {
 
     this.background.height = height;
     this.sky.height = height;
+
+    this.nightOverlay.resize(WORLD_WIDTH, height);
   }
 }

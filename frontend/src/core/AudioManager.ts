@@ -24,7 +24,7 @@ export class AudioManager {
     });
 
     this.backgroundAmbience.play();
-    this.backgroundAmbience.fade(0, 0.6, 3000);
+    this.backgroundAmbience.fade(0, 0.8, 3000);
 
     this.footstepSounds = [
       new Howl({ src: footstep1 }),
@@ -55,7 +55,7 @@ export class AudioManager {
     const randomIndex = Math.floor(Math.random() * this.footstepSounds.length);
     const footstepSound = this.footstepSounds[randomIndex];
 
-    footstepSound.volume(Math.random() * 0.3 + 0.1);
+    footstepSound.volume(Math.random() * 0.5 + 0.1);
     footstepSound.rate(0.6 + Math.random() * 0.2);
     footstepSound.play();
   }

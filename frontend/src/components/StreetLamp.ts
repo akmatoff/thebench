@@ -1,5 +1,5 @@
 import { Assets, Container, Sprite, Ticker } from "pixi.js";
-import { GlowFilter } from "pixi-filters";
+import { BloomFilter, GlowFilter } from "pixi-filters";
 
 export class StreetLamp extends Container {
   private base: Sprite;
@@ -32,14 +32,14 @@ export class StreetLamp extends Container {
     this.scale.set(1.5);
 
     this.glowFilter = new GlowFilter({
-      distance: 4,
-      outerStrength: 16,
-      innerStrength: 0,
+      distance: 3,
+      outerStrength: 40,
+      innerStrength: 200,
       quality: 0.5,
       color: "#ffe0b8ff",
     });
 
-    this.bulb.filters = [this.glowFilter];
+    this.bulb.filters = [this.glowFilter, new BloomFilter()];
   }
 
   update(ticker: Ticker) {}
