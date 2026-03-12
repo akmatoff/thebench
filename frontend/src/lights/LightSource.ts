@@ -14,6 +14,9 @@ export abstract class LightSource extends Container {
   protected graphics: Graphics;
   protected config: LightConfig;
 
+  protected flickerCooldown = 3000;
+  protected isFlickedCoolingDown = false;
+
   constructor(config: LightConfig) {
     super();
     this.config = {
@@ -52,12 +55,35 @@ export abstract class LightSource extends Container {
     this.graphics.pivot.set(0.5);
   }
 
+  protected drawDirectionalGradient(
+    radius: number,
+    color: number,
+    startAngle: number,
+    endAngle: number,
+    layers: number = 5
+  ) {
+    this.graphics.clear();
+
+    for (let i = layers; i > 0; i--) {
+      const r = (radius / layers) * i;
+      const a = (this.config.alpha! / layers) * i * this.config.intensity!;
+
+      this.graphics.moveTo(0, 0);
+      this.graphics.arc(0, 0, r, startAngle, endAngle);
+      this.graphics.closePath();
+
+      this.graphics.fill({ color, alpha: a });
+    }
+  }
+
   update(ticker: Ticker): void {
     if (this.config.flickerSpeed! > 0) {
       const flicker =
         Math.sin(ticker.lastTime * this.config.flickerSpeed!) *
         this.config.flickerIntensity!;
       this.alpha = this.config.alpha! + flicker;
+
+      this.isFlickedCoolingDown = true;
     }
   }
 

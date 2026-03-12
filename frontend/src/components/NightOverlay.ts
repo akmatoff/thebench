@@ -1,4 +1,4 @@
-import { Container, Graphics, NoiseFilter } from "pixi.js";
+import { Container, Graphics } from "pixi.js";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
 import { AdjustmentFilter } from "pixi-filters";
 
@@ -15,7 +15,7 @@ export class NightOverlay extends Container {
 
     this.filters = [
       new AdjustmentFilter({
-        brightness: 0.6,
+        brightness: 0.65,
       }),
     ];
 
@@ -27,8 +27,8 @@ export class NightOverlay extends Container {
 
     this.graphics.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
     this.graphics.fill({
-      color: 0x0d1d4f,
-      alpha: 0.82,
+      color: 0x172973,
+      alpha: 0.8,
     });
   }
 

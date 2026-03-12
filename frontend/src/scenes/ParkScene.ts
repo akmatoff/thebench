@@ -5,7 +5,7 @@ import { StreetLamp } from "../components/StreetLamp";
 import { Sky } from "../components/Sky";
 import { Background } from "../components/Background";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
-import { LanternLight, LightSource, LightSystem } from "../lights";
+import { LanternBulbLight, SpotLight, LightSystem } from "../lights";
 import { NightOverlay } from "../components/NightOverlay";
 import { AdjustmentFilter } from "pixi-filters";
 
@@ -20,7 +20,8 @@ export class ParkScene extends BaseScene {
   private sky!: Sky;
   private lightSystem!: LightSystem;
 
-  private lanternLight!: LanternLight;
+  private lanternLight!: LanternBulbLight;
+  private spotLight!: SpotLight;
   private nightOverlay!: NightOverlay;
 
   async init() {
@@ -48,13 +49,13 @@ export class ParkScene extends BaseScene {
     this.container.addChild(this.streetLamp);
 
     this.container.filters = [
-      new AdjustmentFilter({
-        contrast: 1.6,
-        saturation: 1.1,
-        brightness: 0.9,
-      }),
       new NoiseFilter({
-        noise: 0.03,
+        noise: 0.02,
+      }),
+      new AdjustmentFilter({
+        contrast: 1.8,
+        saturation: 0.7,
+        brightness: 1.4,
       }),
     ];
 
@@ -70,9 +71,13 @@ export class ParkScene extends BaseScene {
   }
 
   private initLights(): void {
-    this.lanternLight = new LanternLight();
-    this.lanternLight.setPosition(this.streetLamp.x, this.streetLamp.y + 80);
+    this.lanternLight = new LanternBulbLight();
+    this.lanternLight.setPosition(this.streetLamp.x, this.streetLamp.y - 140);
     this.lightSystem.addLight(this.lanternLight);
+
+    this.spotLight = new SpotLight();
+    this.spotLight.setPosition(this.streetLamp.x, this.streetLamp.y - 160);
+    this.lightSystem.addLight(this.spotLight);
   }
 
   update(ticker: Ticker) {
