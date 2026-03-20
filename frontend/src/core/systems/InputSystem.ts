@@ -97,6 +97,7 @@ export class InputSystem {
         ) {
           this.game.sendAction("stop_smoking");
         } else {
+          this.game.audio.playLighter();
           this.game.sendAction("smoke");
         }
 
@@ -104,6 +105,7 @@ export class InputSystem {
       case Intent.TakeDrag:
         if (canTakeDrag) {
           playerSprite?.takeDrag();
+          this.game.audio.playCigaretteDrag();
           this.game.sendAction("take_drag");
         }
 
