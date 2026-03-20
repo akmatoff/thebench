@@ -97,7 +97,7 @@ export class AudioManager {
     );
     const cigaretteDragSound = this.cigaretteDragSounds[randomIndex];
 
-    cigaretteDragSound.volume(Math.random() * 1.3 + 0.2);
+    cigaretteDragSound.volume(Math.random() * 1.6 + 0.2);
     cigaretteDragSound.rate(0.9 + Math.random() * 0.2);
     cigaretteDragSound.play();
   }
