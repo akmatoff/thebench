@@ -1,32 +1,33 @@
 import { Application, Ticker } from "pixi.js";
-import { BaseScene } from "./BaseScene";
-import { AudioManager } from "./AudioManager";
-import { GameState } from "./GameState";
-import { GameSocket } from "./GameSocket";
+import { Viewport } from "pixi-viewport";
+
 import { WS_URL } from "../config";
 import { Action } from "../types/game";
-import { InputSystem } from "./systems/InputSystem";
 import { MovementDirection, Player } from "../types/player";
+
+import { AudioManager } from "./AudioManager";
+import { BaseScene } from "./BaseScene";
+import { GameSocket } from "./GameSocket";
+import { GameState } from "./GameState";
+import { InputSystem } from "./systems/InputSystem";
 import { PlayerSystem } from "./systems/PlayerSystem";
-import { Viewport } from "pixi-viewport";
 
 export const WORLD_WIDTH = 2048;
 export const WORLD_HEIGHT = window.innerHeight;
 
 export class Game {
   public app: Application;
-  private currentScene: BaseScene | null = null;
   public audio: AudioManager;
+  public viewport: Viewport;
 
   public readonly state: GameState;
-  public playerId: string | null = null;
-
   public readonly socket: GameSocket;
-
   public readonly input: InputSystem;
   public readonly playerSystem: PlayerSystem;
 
-  public viewport: Viewport;
+  public playerId: string | null = null;
+
+  private currentScene: BaseScene | null = null;
 
   constructor(app: Application, audio: AudioManager, viewport: Viewport) {
     this.app = app;
@@ -36,31 +37,103 @@ export class Game {
     this.state = new GameState();
     this.socket = new GameSocket(this.state, WS_URL);
     this.playerSystem = new PlayerSystem(this);
+    this.input = new InputSystem(this);
 
     this.socket.onConnected = (playerId) => {
       this.setPlayerId(playerId);
     };
 
-    this.input = new InputSystem(this);
-
     window.addEventListener("resize", this.onResize);
-
     this.onResize();
   }
 
-  start(SceneClass: new (game: Game) => BaseScene) {
+  public start(SceneClass: new (game: Game) => BaseScene): void {
     this.currentScene = new SceneClass(this);
-
     this.currentScene.init();
 
     this.viewport.addChild(this.currentScene.container);
-
     this.app.ticker.add(this.update, this);
   }
 
-  private update(delta: Ticker) {
-    this.currentScene?.update(delta);
-    this.playerSystem.updateMovement(delta.deltaTime);
+  public getPlayerState(id: string): Player | undefined {
+    return this.state.snapshot?.players[id];
+  }
+
+  public getCurrentPlayerState(): Player | undefined {
+    if (!this.state.snapshot || !this.playerId) return undefined;
+    return this.state.snapshot.players[this.playerId];
+  }
+
+  public sendAction(action: Action): void {
+    this.socket.sendAction(action);
+  }
+
+  public setPlayerId(id: string): void {
+    this.playerId = id;
+  }
+
+  public movePlayer(direction: MovementDirection): void {
+    this.playerSystem.setMovementDirection(direction);
+  }
+
+  public stopPlayerMovement(): void {
+    this.playerSystem.stopMovement();
+  }
+
+  public sitOnTheBench(): void {
+    const currentPlayer = this.getCurrentPlayer();
+    if (!currentPlayer) return;
+
+    const bench = this.state.snapshot?.bench;
+    if (!bench) return;
+
+    const minX = bench.position.x - bench.seatRadius;
+    const maxX = bench.position.x + bench.seatRadius;
+    const isInRange =
+      currentPlayer.position.x >= minX && currentPlayer.position.x <= maxX;
+
+    if (!isInRange) {
+      console.log("too far from bench");
+      return;
+    }
+
+    this.sendAction("sit");
+  }
+
+  public followPlayer(): void {
+    const player = this.getCurrentPlayer();
+    if (!player) return;
+
+    this.viewport.moveCenter(player.x, this.viewport.center.y);
+  }
+
+  public takeDrag() {
+    const player = this.getCurrentPlayer();
+    if (!player) return;
+
+    return player.takeDrag();
+  }
+
+  public canPlayerTakeDrag(): boolean {
+    const player = this.getCurrentPlayer();
+    if (!player) return false;
+
+    return player.canTakeDrag();
+  }
+
+  public destroy(): void {
+    window.removeEventListener("resize", this.onResize);
+    this.app.ticker.remove(this.update, this);
+
+    this.currentScene?.destroy();
+    this.socket.destroy();
+    this.input.destroy();
+    this.audio.dispose();
+  }
+
+  private update(ticker: Ticker): void {
+    this.currentScene?.update(ticker);
+    this.playerSystem.updateMovement(ticker.deltaTime);
     this.playerSystem.updateFootsteps();
 
     if (this.state.snapshot) {
@@ -70,92 +143,16 @@ export class Game {
     this.followPlayer();
   }
 
-  public getPlayerState(id: string): Player | undefined {
-    return this.state.snapshot?.players[id];
+  private getCurrentPlayer() {
+    if (!this.playerId) return undefined;
+    return this.playerSystem.getPlayer(this.playerId);
   }
 
-  sendAction(action: Action) {
-    this.socket.sendAction(action);
-  }
-
-  setPlayerId(id: string) {
-    this.playerId = id;
-  }
-
-  movePlayer(direction: MovementDirection) {
-    this.playerSystem.setMovementDirection(direction);
-  }
-
-  sitOnTheBench() {
-    const currentPlayer = this.playerSystem.getPlayer(this.playerId!);
-
-    if (!currentPlayer) return;
-
-    const bench = this.state.snapshot?.bench;
-
-    if (!bench) {
-      return;
-    }
-
-    if (
-      currentPlayer.position.x > bench.position.x + bench.seatRadius ||
-      currentPlayer.position.x < bench.position.x - bench.seatRadius
-    ) {
-      console.log("too far from bench");
-      return;
-    }
-
-    this.sendAction("sit");
-  }
-
-  stopPlayerMovement() {
-    this.playerSystem.stopMovement();
-  }
-
-  followPlayer(): void {
-    const player = this.playerSystem.getPlayer(this.playerId!);
-
-    if (!player) return;
-
-    this.viewport.moveCenter(player.x, this.viewport.center.y);
-  }
-
-  getCurrentPlayerState() {
-    if (!this.state.snapshot || !this.playerId) return;
-    return this.state.snapshot.players[this.playerId];
-  }
-
-  private onResize = () => {
+  private onResize = (): void => {
     this.app.resize();
-
     this.viewport.resize(window.innerWidth, window.innerHeight);
 
     this.currentScene?.onResize?.();
     this.playerSystem.onResize();
   };
-
-  takeDrag() {
-    const player = this.playerSystem.getPlayer(this.playerId!);
-
-    if (!player) return;
-
-    return player.takeDrag();
-  }
-
-  canPlayerTakeDrag() {
-    const player = this.playerSystem.getPlayer(this.playerId!);
-
-    if (!player) return false;
-
-    return player.canTakeDrag();
-  }
-
-  destroy(): void {
-    window.removeEventListener("resize", this.onResize);
-    this.app.ticker.remove(this.update, this);
-    this.currentScene?.destroy();
-    this.socket.destroy();
-    this.input.destroy();
-    this.audio.dispose();
-  }
 }

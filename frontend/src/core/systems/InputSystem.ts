@@ -3,20 +3,21 @@ import { MovementDirection } from "../../types/player";
 import { BaseScene } from "../BaseScene";
 import { Game } from "../Game";
 
-const KEY_BINDINGS: Record<KeyboardEvent["code"], Intent> = {
+const KEY_BINDINGS: Partial<Record<KeyboardEvent["code"], Intent>> = {
   Space: Intent.Sit,
   KeyX: Intent.Smoke,
   KeyV: Intent.TakeDrag,
   ArrowLeft: Intent.MoveLeft,
   ArrowRight: Intent.MoveRight,
-  KeyD: Intent.MoveRight,
   KeyA: Intent.MoveLeft,
+  KeyD: Intent.MoveRight,
 };
 
+const PREVENT_DEFAULT_KEYS = new Set<KeyboardEvent["code"]>(["Space", "KeyX"]);
+
 export class InputSystem {
-  private game: Game;
+  private readonly game: Game;
   private active = false;
-  private activeScene: BaseScene | null = null;
 
   private movementState = {
     left: false,
@@ -27,11 +28,10 @@ export class InputSystem {
     this.game = game;
   }
 
-  activate(scene: BaseScene): void {
+  activate(_scene: BaseScene): void {
     if (this.active) return;
 
     this.active = true;
-    this.activeScene = scene;
 
     window.addEventListener("keydown", this.handleKeyDown);
     window.addEventListener("keyup", this.handleKeyUp);
@@ -41,96 +41,104 @@ export class InputSystem {
     if (!this.active) return;
 
     this.active = false;
-    this.activeScene = null;
+    this.resetMovementState();
 
     window.removeEventListener("keydown", this.handleKeyDown);
     window.removeEventListener("keyup", this.handleKeyUp);
+  }
+
+  destroy(): void {
+    this.deactivate();
   }
 
   private handleKeyDown = (event: KeyboardEvent) => {
     if (!this.active || !this.game.state.snapshot) return;
 
     const intent = KEY_BINDINGS[event.code];
+    if (!intent) return;
 
-    if (!intent) {
-      return;
+    if (PREVENT_DEFAULT_KEYS.has(event.code)) {
+      event.preventDefault();
     }
 
-    if (event.code === "KeyX" || event.code === "Space") {
-      event.preventDefault();
+    if (event.repeat && !this.isMovementIntent(intent)) {
+      return;
     }
 
     this.handleIntent(intent);
   };
 
   private handleKeyUp = (event: KeyboardEvent) => {
+    if (!this.active) return;
+
     const intent = KEY_BINDINGS[event.code];
+    if (!intent || !this.isMovementIntent(intent)) return;
 
-    if (!intent) {
-      return;
-    }
-
-    switch (intent) {
-      case Intent.MoveLeft:
-        this.movementState.left = false;
-        this.updateMovement();
-        break;
-      case Intent.MoveRight:
-        this.movementState.right = false;
-        this.updateMovement();
-        break;
-    }
+    this.setMovementIntent(intent, false);
+    this.updateMovement();
   };
 
-  private handleIntent(intent: Intent) {
-    const currentPlayer = this.game.getCurrentPlayerState();
-    const canTakeDrag = this.game.canPlayerTakeDrag();
-
-    const playerSprite = this.game.playerSystem.getPlayer(this.game.playerId!);
-
+  private handleIntent(intent: Intent): void {
     switch (intent) {
       case Intent.Sit:
         this.game.sitOnTheBench();
-        break;
+        return;
+
       case Intent.Smoke:
-        if (
-          currentPlayer?.state === "standing_smoking" ||
-          currentPlayer?.state === "sitting_smoking"
-        ) {
-          this.game.sendAction("stop_smoking");
-        } else {
-          this.game.audio.playLighter();
-          this.game.sendAction("smoke");
-        }
+        this.toggleSmoking();
+        return;
 
-        break;
       case Intent.TakeDrag:
-        if (canTakeDrag) {
-          playerSprite?.takeDrag();
-          this.game.audio.playCigaretteDrag();
-          this.game.sendAction("take_drag");
-        }
+        this.takeDrag();
+        return;
 
-        break;
       case Intent.MoveLeft:
-        this.movementState.left = true;
-        this.updateMovement();
-        break;
       case Intent.MoveRight:
-        this.movementState.right = true;
+        this.setMovementIntent(intent, true);
         this.updateMovement();
-        break;
+        return;
     }
   }
 
-  private updateMovement() {
-    let direction: MovementDirection | null = null;
+  private toggleSmoking(): void {
+    const currentPlayer = this.game.getCurrentPlayerState();
+    const isSmoking =
+      currentPlayer?.state === "standing_smoking" ||
+      currentPlayer?.state === "sitting_smoking";
 
-    if (this.movementState.left) {
-      direction = "left";
-    } else if (this.movementState.right) {
-      direction = "right";
+    if (isSmoking) {
+      this.game.sendAction("stop_smoking");
+      return;
     }
+
+    this.game.audio.playLighter();
+    this.game.sendAction("smoke");
+  }
+
+  private takeDrag(): void {
+    if (!this.game.canPlayerTakeDrag()) return;
+
+    const playerSprite = this.game.playerSystem.getPlayer(this.game.playerId!);
+    playerSprite?.takeDrag();
+
+    this.game.audio.playCigaretteDrag();
+    this.game.sendAction("take_drag");
+  }
+
+  private setMovementIntent(
+    intent: Intent.MoveLeft | Intent.MoveRight,
+    active: boolean
+  ): void {
+    if (intent === Intent.MoveLeft) {
+      this.movementState.left = active;
+      return;
+    }
+
+    this.movementState.right = active;
+  }
+
+  private updateMovement(): void {
+    const direction = this.getMovementDirection();
 
     if (direction) {
       this.game.movePlayer(direction);
@@ -139,7 +147,27 @@ export class InputSystem {
     }
   }
 
-  destroy(): void {
-    this.deactivate();
+  private getMovementDirection(): MovementDirection | null {
+    if (this.movementState.left && !this.movementState.right) {
+      return "left";
+    }
+
+    if (this.movementState.right && !this.movementState.left) {
+      return "right";
+    }
+
+    return null;
+  }
+
+  private resetMovementState(): void {
+    this.movementState.left = false;
+    this.movementState.right = false;
+    this.game.stopPlayerMovement();
+  }
+
+  private isMovementIntent(
+    intent: Intent
+  ): intent is Intent.MoveLeft | Intent.MoveRight {
+    return intent === Intent.MoveLeft || intent === Intent.MoveRight;
   }
 }
