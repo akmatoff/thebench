@@ -9,6 +9,8 @@ const KEY_BINDINGS: Record<KeyboardEvent["code"], Intent> = {
   KeyV: Intent.TakeDrag,
   ArrowLeft: Intent.MoveLeft,
   ArrowRight: Intent.MoveRight,
+  KeyD: Intent.MoveRight,
+  KeyA: Intent.MoveLeft,
 };
 
 export class InputSystem {

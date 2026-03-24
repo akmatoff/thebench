@@ -36,10 +36,11 @@ export default function ControlHint() {
           </div>
           <div className="space-y-4">
             <p>
-              Use <kbd>→</kbd> and <kbd>←</kbd> to move the player.
+              Use <kbd>→</kbd>, <kbd>←</kbd> or <kbd>A</kbd>,<kbd>D</kbd> to
+              move the player.
             </p>
             <p>
-              Use <kbd>x</kbd> to smoke.
+              Use <kbd>x</kbd> to start smoking.
             </p>
             <p>
               Use <kbd>v</kbd> to take a drag.
