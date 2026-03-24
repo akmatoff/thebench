@@ -156,5 +156,6 @@ export class Game {
     this.currentScene?.destroy();
     this.socket.destroy();
     this.input.destroy();
+    this.audio.dispose();
   }
 }
