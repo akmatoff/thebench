@@ -14,7 +14,7 @@ export class LanternBulbLight extends LightSource {
     });
 
     this.filters = [
-      new BlurFilter({ strength: 16 }),
+      new BlurFilter({ strength: 14 }),
       new AdjustmentFilter({
         contrast: 1.1,
       }),

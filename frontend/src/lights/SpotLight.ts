@@ -16,7 +16,7 @@ export class SpotLight extends LightSource {
     this.rotation = Math.PI / 2;
 
     this.filters = [
-      new BlurFilter({ strengthX: 60, strengthY: 100 }),
+      new BlurFilter({ strengthX: 40, strengthY: 40 }),
       new AdjustmentFilter({
         contrast: 0.8,
       }),
