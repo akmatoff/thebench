@@ -1,14 +1,26 @@
-import { Application } from "pixi.js";
+import { Application, Assets } from "pixi.js";
 import "@pixi/layout";
 import { Game, WORLD_WIDTH } from "./core/Game";
 import { ParkScene } from "./scenes/ParkScene";
 import { AudioManager } from "./core/AudioManager";
 import { preloadAssets } from "./loaders/assetLoader";
 import { Viewport } from "pixi-viewport";
-import { initUI } from "./ui";
+import { initLoaderUI, initUI, updateLoaderUI } from "./ui";
+
+initLoaderUI();
 
 (async () => {
-  await preloadAssets();
+  const onProgress = (progress: number) => {
+    updateLoaderUI(progress);
+  };
+
+  Assets.loader.loadOptions.onProgress = onProgress;
+
+  try {
+    await preloadAssets();
+  } catch (e) {
+    console.error("Failed to load assets", e);
+  }
 
   const app = new Application();
 

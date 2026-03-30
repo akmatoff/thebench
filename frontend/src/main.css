@@ -37,11 +37,19 @@ body {
   z-index: 10;
 }
 
+#loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+}
+
 kbd {
   border-radius: 4px;
   padding: 2px 8px;
   background: var(--foreground-color);
   color: white;
-  /*border: 1px solid var(--foreground-color);*/
   margin: 0 4px;
 }
