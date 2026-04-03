@@ -25,7 +25,7 @@ export class ParkScene extends BaseScene {
   async init() {
     this.container.sortableChildren = true;
 
-    this.background = new Background(this.game.app.screen.height);
+    this.background = new Background(WORLD_HEIGHT);
 
     this.container.addChild(this.background);
 
@@ -81,7 +81,7 @@ export class ParkScene extends BaseScene {
   }
 
   onResize(): void {
-    const height = window.innerHeight;
+    const height = WORLD_HEIGHT;
 
     this.bench.position.y = height - BENCH_Y_OFFSET;
     this.streetLamp.position.y = height - STREET_LAMP_Y_OFFSET;

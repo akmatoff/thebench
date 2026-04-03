@@ -110,10 +110,10 @@ export class PlayerSystem {
 
     const { x } = player.position;
 
-    if (x < 0) {
+    if (x + playerSprite.width < 0) {
       playerSprite.x = 0;
-    } else if (x > WORLD_WIDTH) {
-      playerSprite.x = WORLD_WIDTH;
+    } else if (x + playerSprite.width > WORLD_WIDTH) {
+      playerSprite.x = WORLD_WIDTH - playerSprite.width;
     }
   }
 
@@ -159,8 +159,7 @@ export class PlayerSystem {
     }
 
     if (player.x + player.width / 2 < 0) player.x = 0 - player.width / 2;
-    if (player.x > this.sceneContainer.width)
-      player.x = this.sceneContainer.width - player.width / 2;
+    if (player.x > WORLD_WIDTH) player.x = WORLD_WIDTH - player.width / 2;
   }
 
   updateFootsteps(): void {
@@ -211,7 +210,7 @@ export class PlayerSystem {
 
   onResize(): void {
     for (const player of this.players.values()) {
-      player.position.y = window.innerHeight - PLAYER_Y_OFFSET;
+      player.position.y = WORLD_HEIGHT - PLAYER_Y_OFFSET;
     }
   }
 }

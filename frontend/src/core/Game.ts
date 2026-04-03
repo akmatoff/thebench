@@ -13,7 +13,7 @@ import { InputSystem } from "./systems/InputSystem";
 import { PlayerSystem } from "./systems/PlayerSystem";
 
 export const WORLD_WIDTH = 2048;
-export const WORLD_HEIGHT = window.innerHeight;
+export const WORLD_HEIGHT = 1152;
 
 export class Game {
   public app: Application;
@@ -148,7 +148,12 @@ export class Game {
 
   private onResize = (): void => {
     this.app.resize();
-    this.viewport.resize(window.innerWidth, window.innerHeight);
+    this.viewport.resize(
+      window.innerWidth,
+      window.innerHeight,
+      WORLD_WIDTH,
+      WORLD_HEIGHT
+    );
 
     this.currentScene?.onResize?.();
     this.playerSystem.onResize();

@@ -1,6 +1,6 @@
 import { Application, Assets } from "pixi.js";
 import "@pixi/layout";
-import { Game, WORLD_WIDTH } from "./core/Game";
+import { Game, WORLD_HEIGHT, WORLD_WIDTH } from "./core/Game";
 import { ParkScene } from "./scenes/ParkScene";
 import { AudioManager } from "./core/AudioManager";
 import { preloadAssets } from "./loaders/assetLoader";
@@ -24,7 +24,10 @@ initLoaderUI();
 
   const app = new Application();
 
-  await app.init({ background: "#000000", resizeTo: window });
+  await app.init({
+    background: "#000000",
+    resizeTo: window,
+  });
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
@@ -34,12 +37,15 @@ initLoaderUI();
     screenHeight: window.innerHeight,
     screenWidth: window.innerWidth,
     worldWidth: WORLD_WIDTH,
-    worldHeight: window.innerHeight,
+    worldHeight: WORLD_HEIGHT,
     events: app.renderer.events,
   });
 
   viewport.clamp({
-    direction: "x",
+    left: 0,
+    right: WORLD_WIDTH,
+    top: WORLD_HEIGHT / 2,
+    bottom: WORLD_HEIGHT,
   });
 
   const game = new Game(app, audio, viewport);
