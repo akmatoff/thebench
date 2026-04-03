@@ -8,10 +8,9 @@ import (
 )
 
 type PlayerRole string
-
 type PlayerState string
-
 type PlayerFacing string
+type PlayerMovementDirection string
 
 const (
 	FacingLeft  PlayerFacing = "left"
@@ -32,26 +31,34 @@ const (
 	Witness PlayerRole = "witness"
 )
 
+const (
+	PlayerMovementDirectionLeft  PlayerMovementDirection = "left"
+	PlayerMovementDirectionRight PlayerMovementDirection = "right"
+	PlayerMovementDirectionNone  PlayerMovementDirection = "none"
+)
+
 type Player struct {
-	ID         string
-	Role       PlayerRole
-	JoinedAt   time.Time
-	State      PlayerState
-	Position   common.Position
-	Facing     PlayerFacing
-	LastMoveAt time.Time
-	LastDragAt time.Time
+	ID                string
+	Role              PlayerRole
+	JoinedAt          time.Time
+	State             PlayerState
+	Position          common.Position
+	Facing            PlayerFacing
+	MovementDirection PlayerMovementDirection
+	LastMoveAt        time.Time
+	LastDragAt        time.Time
 }
 
 func NewPlayer(id string, role PlayerRole) *Player {
 	return &Player{
-		ID:         id,
-		Role:       role,
-		JoinedAt:   time.Now(),
-		State:      StateIdle,
-		Position:   common.Position{X: 80 + rand.Float64()*600},
-		Facing:     FacingRight,
-		LastMoveAt: time.Now(),
+		ID:                id,
+		Role:              role,
+		JoinedAt:          time.Now(),
+		State:             StateIdle,
+		Position:          common.Position{X: 80 + rand.Float64()*600},
+		MovementDirection: PlayerMovementDirectionNone,
+		Facing:            FacingRight,
+		LastMoveAt:        time.Now(),
 	}
 }
 

@@ -13,8 +13,10 @@ export type Action =
   | "leave"
   | "wave"
   | "pat"
-  | "move_left"
-  | "move_right"
+  | "move_left_start"
+  | "move_right_start"
+  | "move_left_stop"
+  | "move_right_stop"
   | "take_drag";
 
 export enum Intent {

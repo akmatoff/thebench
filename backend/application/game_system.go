@@ -21,10 +21,10 @@ func NewGameSystem() *GameSystem {
 	return gs
 }
 
-func (gs *GameSystem) UpdateLogic() {
+func (gs *GameSystem) UpdateLogic(delta float64) {
 	gs.mu.Lock()
 	defer gs.mu.Unlock()
-	gs.Game.Update()
+	gs.Game.Update(delta)
 
 }
 

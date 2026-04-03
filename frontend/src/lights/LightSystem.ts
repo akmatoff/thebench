@@ -25,9 +25,9 @@ export class LightSystem {
     }
   }
 
-  update(ticker: Ticker): void {
+  update(delta: number): void {
     for (const light of this.lights) {
-      light.update(ticker);
+      light.update(delta);
     }
   }
 

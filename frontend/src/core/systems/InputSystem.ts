@@ -24,6 +24,8 @@ export class InputSystem {
     right: false,
   };
 
+  private lastDirection: MovementDirection | null = null;
+
   constructor(game: Game) {
     this.game = game;
   }
@@ -145,6 +147,24 @@ export class InputSystem {
     } else {
       this.game.stopPlayerMovement();
     }
+
+    if (direction === this.lastDirection) {
+      return;
+    }
+
+    if (this.lastDirection === "right") {
+      this.game.sendAction("move_right_stop");
+    } else if (this.lastDirection === "left") {
+      this.game.sendAction("move_left_stop");
+    }
+
+    if (direction === "right") {
+      this.game.sendAction("move_right_start");
+    } else if (direction === "left") {
+      this.game.sendAction("move_left_start");
+    }
+
+    this.lastDirection = direction;
   }
 
   private getMovementDirection(): MovementDirection | null {
@@ -160,8 +180,16 @@ export class InputSystem {
   }
 
   private resetMovementState(): void {
+    if (this.lastDirection === "left") {
+      this.game.sendAction("move_left_stop");
+    } else if (this.lastDirection === "right") {
+      this.game.sendAction("move_right_stop");
+    }
+
     this.movementState.left = false;
     this.movementState.right = false;
+    this.lastDirection = null;
+
     this.game.stopPlayerMovement();
   }
 

@@ -1,4 +1,4 @@
-import { Container, Ticker } from "pixi.js";
+import { Container } from "pixi.js";
 import { Game } from "./Game";
 
 export abstract class BaseScene {
@@ -11,7 +11,7 @@ export abstract class BaseScene {
 
   abstract init(): Promise<void> | void;
 
-  abstract update(delta: Ticker): void;
+  abstract update(delta: number): void;
 
   onResize?(): void;
 

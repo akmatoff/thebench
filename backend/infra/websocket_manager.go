@@ -109,8 +109,13 @@ func (wm *WebSocketManager) StartBroadcastLoop(gameSystem *application.GameSyste
 	ticker := time.NewTicker(interval)
 
 	go func() {
+		last := time.Now()
+
 		for range ticker.C {
-			gameSystem.UpdateLogic()
+			delta := time.Since(last).Seconds()
+			last = time.Now()
+
+			gameSystem.UpdateLogic(delta)
 
 			snapshot := gameSystem.GetSnapshot()
 			message := NewOutgoingMessage(STATE, snapshot)

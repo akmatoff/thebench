@@ -13,7 +13,7 @@ type Game struct {
 }
 
 const (
-	MOVEMENT_SPEED  = 1
+	MOVEMENT_SPEED  = 170
 	WALKING_TIMEOUT = 100 * time.Millisecond
 )
 
@@ -66,6 +66,7 @@ func (g *Game) Sit(playerID string) error {
 	}
 
 	g.Bench.IsTaken = true
+	player.MovementDirection = PlayerMovementDirectionNone
 
 	if player.State == StateStandingSmoking || player.State == StateWalkingSmoking {
 		player.State = StateSittingSmoking
@@ -91,6 +92,7 @@ func (g *Game) Leave(playerID string) {
 
 	if p := g.Players[playerID]; p != nil {
 		p.Role = Witness
+		p.MovementDirection = PlayerMovementDirectionNone
 
 		if p.State == StateSittingSmoking {
 			p.State = StateStandingSmoking
@@ -151,7 +153,7 @@ func (g *Game) PerformAction(playerID string, action Action) (*Gesture, error) {
 		}
 		g.RecordGesture(NewGesture(action, playerID))
 
-	case ActionMoveLeft:
+	case ActionMoveLeftStart:
 		log.Printf("Player state while moving: %v", player.State)
 
 		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking {
@@ -166,15 +168,19 @@ func (g *Game) PerformAction(playerID string, action Action) (*Gesture, error) {
 		}
 
 		player.Facing = FacingLeft
-		player.Position.X -= MOVEMENT_SPEED
-
+		player.MovementDirection = PlayerMovementDirectionLeft
 		player.LastMoveAt = time.Now()
 
 		if player.Position.X < 0 {
 			player.Position.X = 0
 		}
 
-	case ActionMoveRight:
+	case ActionMoveLeftStop:
+		if player.MovementDirection == PlayerMovementDirectionLeft {
+			player.MovementDirection = PlayerMovementDirectionNone
+		}
+
+	case ActionMoveRightStart:
 		log.Printf("Player state while moving: %v", player.State)
 
 		if player.Role == Sitter || player.State == StateSitting || player.State == StateSittingSmoking {
@@ -190,12 +196,16 @@ func (g *Game) PerformAction(playerID string, action Action) (*Gesture, error) {
 		}
 
 		player.Facing = FacingRight
-		player.Position.X += MOVEMENT_SPEED
-
+		player.MovementDirection = PlayerMovementDirectionRight
 		player.LastMoveAt = time.Now()
 
 		if player.Position.X > WorldWidth {
 			player.Position.X = WorldWidth
+		}
+
+	case ActionMoveRightStop:
+		if player.MovementDirection == PlayerMovementDirectionRight {
+			player.MovementDirection = PlayerMovementDirectionNone
 		}
 
 	default:
@@ -223,17 +233,54 @@ func (g *Game) UpdateWitnessCount() {
 	g.Bench.WitnessCount = count
 }
 
-func (g *Game) Update() {
+func (g *Game) Update(delta float64) {
 	now := time.Now()
 
 	for _, p := range g.Players {
-		if now.Sub(p.LastMoveAt) > WALKING_TIMEOUT {
-			switch p.State {
-			case StateStandingSmoking, StateWalkingSmoking:
+		if p == nil {
+			continue
+		}
+
+		if p.Role == Sitter || p.State == StateSitting || p.State == StateSittingSmoking {
+			p.MovementDirection = PlayerMovementDirectionNone
+			continue
+		}
+
+		switch p.MovementDirection {
+		case PlayerMovementDirectionLeft:
+			p.Position.X -= MOVEMENT_SPEED * delta
+			p.Facing = FacingLeft
+			p.LastMoveAt = now
+
+			if p.State == StateStandingSmoking || p.State == StateWalkingSmoking {
+				p.State = StateWalkingSmoking
+			} else {
+				p.State = StateWalking
+			}
+		case PlayerMovementDirectionRight:
+			p.Position.X += MOVEMENT_SPEED * delta
+			p.Facing = FacingRight
+			p.LastMoveAt = now
+
+			if p.State == StateStandingSmoking || p.State == StateWalkingSmoking {
+				p.State = StateWalkingSmoking
+			} else {
+				p.State = StateWalking
+			}
+		default:
+			if p.State == StateWalkingSmoking || p.State == StateStandingSmoking {
 				p.State = StateStandingSmoking
-			case StateIdle, StateWalking:
+			} else {
 				p.State = StateIdle
 			}
+		}
+
+		if p.Position.X < 0 {
+			p.Position.X = 0
+		}
+
+		if p.Position.X > WorldWidth {
+			p.Position.X = WorldWidth
 		}
 
 	}

@@ -6,6 +6,7 @@ import { GameStateSnapshot, GesturePayload } from "../../types/messages";
 import { Player } from "../../components/Player";
 
 export const PLAYER_Y_OFFSET = 220;
+export const MAX_PLAYER_MOVEMENT_ERROR = 20;
 
 export class PlayerSystem {
   private sceneContainer: Container | null = null;
@@ -13,7 +14,7 @@ export class PlayerSystem {
   private game: Game;
 
   private currentMovementDirection: MovementDirection | null = null;
-  private movementSpeed = 1;
+  private movementSpeed = 170;
 
   private players: Map<string, Player> = new Map();
 
@@ -88,7 +89,15 @@ export class PlayerSystem {
         playerSprite.position.x = player.position.x;
       }
 
-      if (id !== this.game.playerId) {
+      if (id === this.game.playerId) {
+        const error = player.position.x - playerSprite.x;
+
+        if (Math.abs(error) > MAX_PLAYER_MOVEMENT_ERROR) {
+          playerSprite.x = player.position.x;
+        } else {
+          playerSprite.x += error * 0.5;
+        }
+      } else {
         playerSprite.x = player.position.x;
       }
     }
@@ -143,11 +152,9 @@ export class PlayerSystem {
     switch (this.currentMovementDirection) {
       case "left":
         player.x -= this.movementSpeed * delta;
-        this.game.sendAction("move_left");
         break;
       case "right":
         player.x += this.movementSpeed * delta;
-        this.game.sendAction("move_right");
         break;
     }
 

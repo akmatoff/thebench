@@ -42,12 +42,12 @@ export class Rain extends Container {
     this.filters = [blurFilter];
   }
 
-  update(ticker: Ticker) {
-    const speed = 25 * ticker.deltaTime;
+  update(delta: number) {
+    const speed = 25 * delta;
 
     for (const rainDrop of this.rainDrops) {
       rainDrop.y += speed;
-      rainDrop.x += 5 * ticker.deltaTime;
+      rainDrop.x += 5 * delta;
 
       if (rainDrop.y > this.height) {
         rainDrop.x = Math.random() * this.width;

@@ -1,4 +1,4 @@
-import { BlurFilter, Ticker } from "pixi.js";
+import { BlurFilter } from "pixi.js";
 import { LightSource } from "./LightSource";
 import { AdjustmentFilter } from "pixi-filters";
 
@@ -25,8 +25,8 @@ export class LanternBulbLight extends LightSource {
     this.drawRadialGradient(this.config.radius, this.config.color, 1);
   }
 
-  update(ticker: Ticker): void {
-    super.update(ticker);
+  update(delta: number): void {
+    super.update(delta);
   }
 
   setPosition(x: number, y: number): void {

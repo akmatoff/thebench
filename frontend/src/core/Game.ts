@@ -132,13 +132,11 @@ export class Game {
   }
 
   private update(ticker: Ticker): void {
-    this.currentScene?.update(ticker);
-    this.playerSystem.updateMovement(ticker.deltaTime);
-    this.playerSystem.updateFootsteps();
+    const delta = Math.min(ticker.elapsedMS / 1000, 0.1);
 
-    if (this.state.snapshot) {
-      this.playerSystem.onStateUpdate(this.state.snapshot);
-    }
+    this.currentScene?.update(delta);
+    this.playerSystem.updateMovement(delta);
+    this.playerSystem.updateFootsteps();
 
     this.followPlayer();
   }

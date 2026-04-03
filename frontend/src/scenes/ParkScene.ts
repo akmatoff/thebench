@@ -2,7 +2,6 @@ import { NoiseFilter, Ticker } from "pixi.js";
 import { Bench } from "../components/Bench";
 import { BaseScene } from "../core/BaseScene";
 import { StreetLamp } from "../components/StreetLamp";
-import { Sky } from "../components/Sky";
 import { Background } from "../components/Background";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
 import { LanternBulbLight, SpotLight, LightSystem } from "../lights";
@@ -17,7 +16,6 @@ export class ParkScene extends BaseScene {
   private background!: Background;
 
   private streetLamp!: StreetLamp;
-  private sky!: Sky;
   private lightSystem!: LightSystem;
 
   private lanternLight!: LanternBulbLight;
@@ -26,10 +24,6 @@ export class ParkScene extends BaseScene {
 
   async init() {
     this.container.sortableChildren = true;
-
-    this.sky = new Sky(this.game.app.screen.width, this.game.app.screen.height);
-
-    this.container.addChild(this.sky);
 
     this.background = new Background(this.game.app.screen.height);
 
@@ -80,11 +74,10 @@ export class ParkScene extends BaseScene {
     this.lightSystem.addLight(this.spotLight);
   }
 
-  update(ticker: Ticker) {
-    this.streetLamp.update(ticker);
-    this.sky.update(ticker);
-    this.lightSystem.update(ticker);
-    this.game.playerSystem.updateMovement(ticker.deltaTime);
+  update(delta: number) {
+    this.streetLamp.update(delta);
+    this.lightSystem.update(delta);
+    this.game.playerSystem.updateMovement(delta);
   }
 
   onResize(): void {
@@ -94,7 +87,6 @@ export class ParkScene extends BaseScene {
     this.streetLamp.position.y = height - STREET_LAMP_Y_OFFSET;
 
     this.background.height = height;
-    this.sky.height = height;
 
     this.nightOverlay.resize(WORLD_WIDTH, height);
   }

@@ -42,5 +42,5 @@ export class StreetLamp extends Container {
     this.bulb.filters = [this.glowFilter, new BloomFilter()];
   }
 
-  update(ticker: Ticker) {}
+  update(delta: number) {}
 }

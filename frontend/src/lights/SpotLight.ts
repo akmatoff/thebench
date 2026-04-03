@@ -33,8 +33,8 @@ export class SpotLight extends LightSource {
     );
   }
 
-  update(ticker: Ticker): void {
-    super.update(ticker);
+  update(delta: number): void {
+    super.update(delta);
   }
 
   setPosition(x: number, y: number): void {

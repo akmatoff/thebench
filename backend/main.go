@@ -14,7 +14,7 @@ func main() {
 	gameSystem := application.NewGameSystem()
 	wsManager := infra.NewWebSocketManager()
 
-	wsManager.StartBroadcastLoop(gameSystem, 50*time.Millisecond)
+	wsManager.StartBroadcastLoop(gameSystem, 16*time.Millisecond)
 
 	wsHandler := websocket.NewHandler(gameSystem, wsManager)
 

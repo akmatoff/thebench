@@ -76,10 +76,10 @@ export abstract class LightSource extends Container {
     }
   }
 
-  update(ticker: Ticker): void {
+  update(delta: number): void {
     if (this.config.flickerSpeed! > 0) {
       const flicker =
-        Math.sin(ticker.lastTime * this.config.flickerSpeed!) *
+        Math.sin(delta * this.config.flickerSpeed!) *
         this.config.flickerIntensity!;
       this.alpha = this.config.alpha! + flicker;
 
