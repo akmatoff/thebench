@@ -147,7 +147,13 @@ export class Game {
   }
 
   private onResize = (): void => {
-    this.app.resize();
+    const scale = Math.max(
+      window.innerWidth / WORLD_WIDTH,
+      window.innerHeight / WORLD_HEIGHT
+    );
+
+    this.viewport.scale.set(scale);
+
     this.viewport.resize(
       window.innerWidth,
       window.innerHeight,
