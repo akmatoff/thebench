@@ -15,7 +15,7 @@ export class NightOverlay extends Container {
 
     this.filters = [
       new AdjustmentFilter({
-        brightness: 0.65,
+        brightness: 1,
       }),
     ];
 
@@ -28,7 +28,7 @@ export class NightOverlay extends Container {
     this.graphics.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
     this.graphics.fill({
       color: 0x172973,
-      alpha: 0.8,
+      alpha: 0.7,
     });
   }
 

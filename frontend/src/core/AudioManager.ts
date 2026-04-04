@@ -102,7 +102,7 @@ export class AudioManager {
 
   private startBackgroundAmbience() {
     this.backgroundAmbience.play();
-    this.backgroundAmbience.fade(0, 1, 3000);
+    this.backgroundAmbience.fade(0, 1.5, 3000);
   }
 
   private scheduleBackgroundMusic() {

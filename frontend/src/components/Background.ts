@@ -1,17 +1,42 @@
-import { Assets, Sprite } from "pixi.js";
-import { WORLD_WIDTH } from "../core/Game";
+import {
+  AnimatedSprite,
+  Assets,
+  Container,
+  Spritesheet,
+  SpritesheetData,
+  Texture,
+} from "pixi.js";
+import { WORLD_HEIGHT, WORLD_WIDTH } from "../core/Game";
 
-export class Background extends Sprite {
-  constructor(height: number) {
+export class Background extends Container {
+  sprite!: AnimatedSprite;
+
+  constructor() {
     super();
+    void this.init();
+  }
 
-    const texture = Assets.get("background");
+  async init() {
+    const frames: Texture[] = [];
 
-    this.texture = texture;
-    this.width = WORLD_WIDTH;
-    this.height = height;
+    for (let i = 1; i <= 11; i++) {
+      frames.push(Assets.get(`bg${i}`));
+    }
 
-    this.position.set(0, 0);
-    this.anchor.set(0, 0);
+    this.sprite = new AnimatedSprite(frames);
+    this.sprite.loop = true;
+    this.sprite.animationSpeed = 0.1;
+    this.sprite.anchor.set(0, 0);
+    this.sprite.position.set(0, 0);
+    this.sprite.width = WORLD_WIDTH;
+    this.sprite.height = WORLD_HEIGHT;
+
+    this.addChild(this.sprite);
+    this.sprite.play();
+  }
+
+  resize(width: number, height: number) {
+    this.sprite.width = width;
+    this.sprite.height = height;
   }
 }

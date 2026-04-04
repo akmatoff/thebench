@@ -25,7 +25,7 @@ export class ParkScene extends BaseScene {
   async init() {
     this.container.sortableChildren = true;
 
-    this.background = new Background(WORLD_HEIGHT);
+    this.background = new Background();
 
     this.container.addChild(this.background);
 
@@ -44,12 +44,12 @@ export class ParkScene extends BaseScene {
 
     this.container.filters = [
       new NoiseFilter({
-        noise: 0.02,
+        noise: 0.03,
       }),
       new AdjustmentFilter({
-        contrast: 1.8,
-        saturation: 0.7,
-        brightness: 1.4,
+        contrast: 1.6,
+        saturation: 0.8,
+        brightness: 1.3,
       }),
     ];
 
