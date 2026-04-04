@@ -114,7 +114,7 @@ export class AudioManager {
       this.backgroundMusic.once("end", () => {
         if (this.disposed) return;
 
-        const delay = this.randomBetween(30_000, 60_000);
+        const delay = this.randomBetween(50_000, 120_000);
         this.bgMusicLoopTimeoutId = setTimeout(playLooped, delay);
       });
     };
