@@ -1,7 +1,8 @@
 # A quiet place in the web
-
 A real-time, shared virtual space where strangers gather, coexist and simply be. 
 Built with presence and poetry in mind.
+
+[Visit the bench](https://projectbench.io)
 
 ## Vision and Inspiration
 
@@ -15,9 +16,8 @@ This project is my way of sharing this experience in an interesting, digital way
 
 ## Tech Stack 
 **Backend**: Go (with Gorilla Websocket for real-time sync)
-**Frontend**: TypeScript (with Pixi.js, canvas-based and animated)
 
---- 
+**Frontend**: TypeScript (with Pixi.js, canvas-based and animated)
 
 This is a work in progress.
 I'm still building toward the vision, slowly.
