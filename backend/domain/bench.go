@@ -9,7 +9,7 @@ type Bench struct {
 	IsTaken       bool
 	LastGesture   *Gesture
 	Position      common.Position
-	SeatPositions [2]common.Position
+	SeatPositions [2]common.PositionWithRadius
 	SeatRadius    float64
 }
 
@@ -21,9 +21,9 @@ func NewBench() *Bench {
 		Sitters:      [2]*Player{nil, nil},
 		LastGesture:  nil,
 		Position:     common.Position{X: WorldWidth / 2},
-		SeatPositions: [2]common.Position{
-			{X: WorldWidth/2 - 86},
-			{X: WorldWidth/2 + 86},
+		SeatPositions: [2]common.PositionWithRadius{
+			{X: WorldWidth/2 - 86, SeatRadius: 20},
+			{X: WorldWidth/2 + 86, SeatRadius: 20},
 		},
 		SeatRadius: 210,
 	}

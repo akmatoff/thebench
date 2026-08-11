@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/akmatoff/thebench/errors"
+	"github.com/akmatoff/thebench/utils"
 )
 
 type Game struct {
@@ -36,8 +37,28 @@ func (g *Game) GetPlayer(id string) *Player {
 	return g.Players[id]
 }
 
+func (g *Game) FindNearestSeat(player *Player, bench *Bench) (int, error) {
+	var minDistance float64
+	var seatIndex int
+
+	for i, seatPosition := range bench.SeatPositions {
+		distance := utils.Abs(player.Position.X - seatPosition.X)
+		if distance < minDistance || minDistance == 0 {
+			minDistance = distance
+			seatIndex = i
+		}
+	}
+
+	if bench.Sitters[seatIndex] != nil {
+		return -1, errors.ErrBenchFull
+	}
+
+	return seatIndex, nil
+}
+
 func (g *Game) Sit(playerID string) error {
 	player := g.Players[playerID]
+
 	if player == nil {
 		return errors.ErrPlayerNotFound
 	}
@@ -51,18 +72,17 @@ func (g *Game) Sit(playerID string) error {
 		return errors.ErrBenchFull
 	}
 
-	// check if player is near bench with calculation of distance
-	if player.Position.X > g.Bench.Position.X+g.Bench.SeatRadius ||
-		player.Position.X < g.Bench.Position.X-g.Bench.SeatRadius {
-		return errors.ErrPlayerTooFar
+	seatIndex, err := g.FindNearestSeat(player, g.Bench)
+
+	if err != nil {
+		return err
 	}
 
-	if g.Bench.Sitters[0] == nil {
-		g.Bench.Sitters[0] = player
-		player.Position.X = g.Bench.SeatPositions[0].X
+	if g.Bench.Sitters[seatIndex] == nil {
+		g.Bench.Sitters[seatIndex] = player
+		player.Position.X = g.Bench.SeatPositions[seatIndex].X
 	} else {
-		g.Bench.Sitters[1] = player
-		player.Position.X = g.Bench.SeatPositions[1].X
+		return errors.ErrBenchFull
 	}
 
 	g.Bench.IsTaken = true
