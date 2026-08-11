@@ -38,22 +38,33 @@ func (g *Game) GetPlayer(id string) *Player {
 }
 
 func (g *Game) FindNearestSeat(player *Player, bench *Bench) (int, error) {
-	var minDistance float64
-	var seatIndex int
+	nearestSeat := -1
+	nearestDistance := float64(0)
 
-	for i, seatPosition := range bench.SeatPositions {
-		distance := utils.Abs(player.Position.X - seatPosition.X)
-		if distance < minDistance || minDistance == 0 {
-			minDistance = distance
-			seatIndex = i
+	for i, seat := range bench.SeatPositions {
+		distance := utils.Abs(player.Position.X - seat.X)
+
+		// Player is outside this seat's allowed radius.
+		if distance > seat.SeatRadius {
+			continue
+		}
+
+		if bench.Sitters[i] != nil {
+			continue
+		}
+
+		// First valid seat, or closer than the previous one.
+		if nearestSeat == -1 || distance < nearestDistance {
+			nearestSeat = i
+			nearestDistance = distance
 		}
 	}
 
-	if bench.Sitters[seatIndex] != nil {
+	if nearestSeat == -1 {
 		return -1, errors.ErrBenchFull
 	}
 
-	return seatIndex, nil
+	return nearestSeat, nil
 }
 
 func (g *Game) Sit(playerID string) error {
@@ -77,6 +88,8 @@ func (g *Game) Sit(playerID string) error {
 	if err != nil {
 		return err
 	}
+
+	log.Printf("Seat index: %d", seatIndex)
 
 	if g.Bench.Sitters[seatIndex] == nil {
 		g.Bench.Sitters[seatIndex] = player
