@@ -47,9 +47,9 @@ export class ParkScene extends BaseScene {
         noise: 0.03,
       }),
       new AdjustmentFilter({
-        contrast: 1.6,
-        saturation: 0.8,
-        brightness: 1.3,
+        contrast: 1.5,
+        saturation: 0.5,
+        brightness: 1.2,
       }),
     ];
 

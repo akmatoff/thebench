@@ -27,7 +27,7 @@ export class NightOverlay extends Container {
 
     this.graphics.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
     this.graphics.fill({
-      color: 0x172973,
+      color: 0x121521,
       alpha: 0.7,
     });
   }
